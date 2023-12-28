@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
-
+import mongoosePaginate from "mongoose-paginate-v2";
 const collection = 'Carts';
 
-const userSchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
     products: [
         {
           id: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "products",
             required: true,
           },
           quantity: {
@@ -17,6 +18,12 @@ const userSchema = new mongoose.Schema({
       ],
 })
 
-const cartsModel = mongoose.model(collection,userSchema);
+//Esto es para que cuando mongoose traiga un carrito, tambien traiga el objeto Producto, que esta referenciado por: type: mongoose.Schema.Types.ObjectId, + ref: "products",
+cartSchema.pre("find", function(){
+  this.populate("products.product");
+})
+
+
+const cartsModel = mongoose.model(collection,cartSchema);
 
 export default cartsModel;

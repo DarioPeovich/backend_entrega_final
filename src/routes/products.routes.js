@@ -8,9 +8,16 @@ const router = Router();
 const productMangerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
-  
+
   try {
-    const products = await productMangerDB.getProducts();
+    const { limit, page, sort, category, price } = req.query;
+    const options = {
+      limit: limit ?? 10,
+      page: page ?? 1,
+      sort: { price: sort === "asc" ? 1 : -1 },   //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
+      lean: true,
+    };
+    const products = await productMangerDB.getProducts(options);
     res.send({
       status: "succes",
       products,
@@ -18,8 +25,7 @@ router.get("/", async (req, res) => {
   } catch {
     console.log("Error en lectura de archivos!!");
     return res.status(400).send({ error: "Error en lectura de archivos" });
-        
-    }
+  }
 });
 
 router.get("/:pid", async (req, res) => {

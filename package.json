@@ -1,5 +1,5 @@
 {
-  "name": "entrega_01",
+  "name": "entrega_02",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -46,6 +46,7 @@
     "mime-db": "^1.52.0",
     "mime-types": "^2.1.35",
     "mongoose": "^8.0.3",
+    "mongoose-paginate-v2": "^1.7.4",
     "ms": "^2.0.0",
     "negotiator": "^0.6.3",
     "object-inspect": "^1.13.1",
