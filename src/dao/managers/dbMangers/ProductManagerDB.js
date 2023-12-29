@@ -4,19 +4,42 @@ import productsModel from "../../models/products.model.js"
 
 class ProductManagerDB {
 
-  getProducts = async (options) => {
+  getProducts = async (limit, page, sort, category, availability, query) => {
     
       try {
-        console.log("options" + options)
-       // const products = await productsModel.paginate({}, { ...options });
-        const products = await productsModel.paginate(
-          {
-          },
-          {
-              ...options
-          }
-      );
-      
+
+        const filter = {};
+        // if (category) {
+        //     filter.category = category;
+        // }
+        // if (availability) {
+        //     filter.stock = { $gt: 0 };
+        // }
+
+        // if (query) {
+        //     filter.$or = [
+        //         { title: { $regex: new RegExp(query, 'i') } },
+        //     ];
+        // }
+        
+        const options = {
+          limit: parseInt(limit) > 0 ? parseInt(limit) : 10,
+          page: page ?? 1,
+          sort: { price: (sort === "asc" ? 1 : -1) }, //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
+          //sort: { price:-1},
+          lean: true,
+        };
+        console.log("sort: " + sort);
+        const products = await productsModel.paginate({}, {...options});
+        //console.log(products);
+
+    if(products.hasPrevPage){
+      products.prevLink = `api/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+  }
+  
+  if(products.hasNextPage){
+      products.nextLink = `api/products/?limit=${limit}&page=${products.nextPage}&sort=${sort}`
+  }
       return {
           status: "success",
           msg: products
@@ -27,16 +50,7 @@ class ProductManagerDB {
    
     };
 
-    // getProducts = async () => {
-  
-    //   try {
-    //     const products = await productsModel.find();
-    //     return products;
-    //   } catch {
-    //     console.log("Error en lectura de archivos!!");
-    //   }
-   
-    // };
+ 
 
   createProduct = async (product) => {
 

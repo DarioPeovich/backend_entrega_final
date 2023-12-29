@@ -9,36 +9,27 @@ const productMangerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
   try {
-    const { limit, page, sort, category, price } = req.query;
-    console.log("limit:" + limit);
-    const options = {
-      limit: parseInt(limit) ?? 10,
-      page: page ?? 1,
-      sort: { price: sort === "asc" ? 1 : -1 }, //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
-      lean: true,
-    };
-    const result = await productMangerDB.getProducts(options);
-    const products = result.msg
-    
+    const { limit, page, sort, category, availability, query } = req.query;
 
-    products.prevLink = "---LINK---";
-    products.nextLink = "---LINK---";
-    //console.log("products.hasPrevPage:" + products.docs.msg)
-    console.log("products.hasNextPage:" )
-    console.log(products.hasNextPages)
-    console.log("products.hasPrevtPage:" )
-    console.log(products.hasPrevPages)
+    const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
     
+    const products = result.msg;
+
     res.render("products", {products} );
+
+    //Comentar
     // res.send({
     //   status: "succes",
     //   products,
     // });
-  } catch {
-    console.log("Error en lectura de archivos!!");
-    return res.status(400).send({ error: "Error en lectura de archivos" });
-  }
-});
+    //-------------
+
+     } catch (error) {
+      console.log("Error en lectura de archivos:", error);
+       return res.status(400).send({ error: "Error en lectura de archivos" });
+     }
+  
+  });
 
 router.get("/:pid", async (req, res) => {
   const pid = req.params.pid;
