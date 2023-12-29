@@ -8,20 +8,32 @@ const router = Router();
 const productMangerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
-
   try {
     const { limit, page, sort, category, price } = req.query;
+    console.log("limit:" + limit);
     const options = {
-      limit: limit ?? 10,
+      limit: parseInt(limit) ?? 10,
       page: page ?? 1,
-      sort: { price: sort === "asc" ? 1 : -1 },   //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
+      sort: { price: sort === "asc" ? 1 : -1 }, //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
       lean: true,
     };
-    const products = await productMangerDB.getProducts(options);
-    res.send({
-      status: "succes",
-      products,
-    });
+    const result = await productMangerDB.getProducts(options);
+    const products = result.msg
+    
+
+    products.prevLink = "---LINK---";
+    products.nextLink = "---LINK---";
+    //console.log("products.hasPrevPage:" + products.docs.msg)
+    console.log("products.hasNextPage:" )
+    console.log(products.hasNextPages)
+    console.log("products.hasPrevtPage:" )
+    console.log(products.hasPrevPages)
+    
+    res.render("products", {products} );
+    // res.send({
+    //   status: "succes",
+    //   products,
+    // });
   } catch {
     console.log("Error en lectura de archivos!!");
     return res.status(400).send({ error: "Error en lectura de archivos" });
