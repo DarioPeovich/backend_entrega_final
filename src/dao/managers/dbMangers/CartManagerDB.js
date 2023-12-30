@@ -5,7 +5,10 @@ class CartManagerDB {
     try {
       const carts = await cartsModel.find();
       return carts;
-    } catch {}
+    } catch (error) {
+      console.error("Error fetching carts:", error);
+      // Manejar el error según sea necesario
+    }
   };
 
   getIdCart = async (idCart) => {
@@ -42,7 +45,7 @@ class CartManagerDB {
       cart.products[productIndex].quantity += quantity;
     } else {
       const product = {
-        id: idProduct,
+        product: idProduct,
         quantity: quantity,
       };
       cart.products.push(product);
@@ -52,6 +55,39 @@ class CartManagerDB {
   } catch {"Error en BD!!"}
   };
 
+updateCartMany = async (idCart, products) => {
+    //Products: array de productos, que contendra el id del producto y la quantity
+    console.log("idCart:" + idCart)
+    console.log(...products)
+    try {
+      const cart = await cartsModel.findById({ _id: idCart });
+      
+      if (!cart) {
+        
+        return res.status(404).send({
+          status: "error",
+          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
+        });
+      }
+     // products.array.forEach(productArray => { //forEach no permite el await dentro de su bloque de iteracion
+    for (const productArray of products) {
+      const productIndex = cart.products.findIndex((product) => product.id === productArray.idProduct);
+      
+      if (productIndex >= 0) {
+        cart.products[productIndex].quantity += productArray.quantity;
+      } else {
+        const product = {
+          product: productArray.idProduct,
+          quantity: productArray.quantity,
+        };
+        cart.products.push(product);
+      }
+      const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
+    };
+    return result
+  } catch {"Error en BD!!"}
+  };
+  //----Fin "updateCartMany": metodo para agregar array de productos desde body
 
   deleteCart = async (idCart) => {
     try {

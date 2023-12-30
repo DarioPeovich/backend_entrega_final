@@ -9,36 +9,41 @@ class ProductManagerDB {
       try {
 
         const filter = {};
-        // if (category) {
-        //     filter.category = category;
-        // }
-        // if (availability) {
-        //     filter.stock = { $gt: 0 };
-        // }
+        if (category) {
+            filter.category = category;
+        }
+        if (availability) {
+            filter.stock = { $gt: 0 };    //Mayor que cero
+        }
 
-        // if (query) {
-        //     filter.$or = [
-        //         { title: { $regex: new RegExp(query, 'i') } },
-        //     ];
-        // }
+        if (query) {
+            filter.$or = [
+                { title: { $regex: new RegExp(query, 'i') } },
+            ];
+        }
         
+        //Se hacen las validaciones acá xq dentro del objeto options no me andan
+        limit = limit ?? 10;
+        sort = (sort === "asc" ? 1 : -1)
+        page = page ?? 1
         const options = {
-          limit: parseInt(limit) > 0 ? parseInt(limit) : 10,
-          page: page ?? 1,
-          sort: { price: (sort === "asc" ? 1 : -1) }, //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
-          //sort: { price:-1},
+          limit: limit,
+          page: page,
+          sort: { price: sort}, //Ordena x precio y en la query se debe indicar ?sort=asc o ?sort=desc
           lean: true,
         };
-        console.log("sort: " + sort);
-        const products = await productsModel.paginate({}, {...options});
+
+        const products = await productsModel.paginate(filter, {...options});
         //console.log(products);
 
     if(products.hasPrevPage){
-      products.prevLink = `api/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+      products.prevLink = `http://localhost:8080/api/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+      //products.prevLink = `/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
   }
   
   if(products.hasNextPage){
-      products.nextLink = `api/products/?limit=${limit}&page=${products.nextPage}&sort=${sort}`
+      //products.nextLink = `api/products/?limit=${limit}&page=${products.nextPage}&sort=${sort}`
+      products.nextLink = `?limit=${limit}&page=${products.nextPage}&sort=${sort}`
   }
       return {
           status: "success",

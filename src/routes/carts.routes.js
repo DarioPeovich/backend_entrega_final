@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
   try {
     //const carts = await cartsModel.find();
     const carts = await cartManagerDB.getCarts();
+    console.log(carts)
     res.send({
       status: "succes",
       carts,
@@ -50,6 +51,24 @@ router.post("/", async (req, res) => {
   try {
     //const carts = await cartsModel.create(cart);
     const carts = await cartManagerDB.createCarts(cart);
+    res.send({
+      status: "succes",
+      msg: "Ruta POST CART",
+      carts,
+    });
+  } catch {
+    console.log("Error en lectura de archivos!!");
+  }
+
+});
+
+//Se agrega al Carrito, un array de productos, que viene del body
+router.post("/:cid", async (req, res) => {
+  const products = req.body.products;
+  
+  try {
+    //const carts = await cartsModel.create(cart);
+    const carts = await cartManagerDB.updateCartMany(cid, products);
     res.send({
       status: "succes",
       msg: "Ruta POST CART",

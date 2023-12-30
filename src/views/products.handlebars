@@ -2,19 +2,19 @@
     <h1>Productos</h1>
     <ul>
         {{#each products.docs}}
-            <li>{{this.description}} {{this.price}} {{this.category}}</li>
+            <li>{{this.title}}: {{this.description}} {{this.price}} {{this.category}}</li>
         {{/each}}
     </ul>
     <div>
         ||
         {{#if products.hasPrevPage}}
-            <a href="/api/products/?page={{products.prevPage}}">Anterior</a>
+            <a href={{products.prevLink}}>Anterior</a>
         {{/if}}
         ||
         <span>Página {{products.page}} de {{products.totalPages}}</span>
         ||
         {{#if products.hasNextPage}}
-            <a href="/api/products/?page={{products.nextPage}}">Siguiente</a>
+            <a href={{products.nextLink}}>Siguiente</a>
         {{/if}}
         ||
     </div>

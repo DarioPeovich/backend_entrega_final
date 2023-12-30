@@ -15,13 +15,14 @@ router.get("/", async (req, res) => {
     
     const products = result.msg;
 
-    res.render("products", {products} );
+    //Habilitar para la entrega
+    //res.render("products", {products} );
 
     //Comentar
-    // res.send({
-    //   status: "succes",
-    //   products,
-    // });
+    res.send({
+      status: "succes",
+      products,
+    });
     //-------------
 
      } catch (error) {
