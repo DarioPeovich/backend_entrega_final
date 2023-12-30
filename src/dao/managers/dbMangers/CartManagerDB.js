@@ -71,8 +71,7 @@ updateCartMany = async (idCart, products) => {
       }
      // products.array.forEach(productArray => { //forEach no permite el await dentro de su bloque de iteracion
     for (const productArray of products) {
-      const productIndex = cart.products.findIndex((product) => product.id === productArray.idProduct);
-      
+      const productIndex = cart.products.findIndex((product) => product.product.toString() === productArray.idProduct.toString())   //Hasta que no le puse toString(), no anduvo !!! (pero xq?)
       if (productIndex >= 0) {
         cart.products[productIndex].quantity += productArray.quantity;
       } else {
@@ -91,7 +90,38 @@ updateCartMany = async (idCart, products) => {
 
   deleteCart = async (idCart) => {
     try {
-      const result = await cartsModel.deleteOne({ _id: idCart });
+      const cart = await this.getIdCart(idCart)
+      if (!cart) { 
+        return res.status(404).send({
+          status: "error",
+          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
+        });
+      }
+      
+      //const result = await cart.save();
+      const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
+      //const result = await cartsModel.deleteOne({ _id: idCart });
+      return result;
+    } catch {
+
+    }
+  }
+
+  deleteProductCart = async (idCart, idProduct) => {
+    try {
+      const cart = await this.getIdCart(idCart)
+      if (!cart) { 
+        return res.status(404).send({
+          status: "error",
+          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
+        });
+      }
+      const productIndex = cart.products.findIndex((product) => product.id === idProduct);
+      cart.products.splice(productIndex, 1)
+
+      //const result = await cart.save();
+      const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
+      //const result = await cartsModel.deleteOne({ _id: idCart });
       return result;
     } catch {
 

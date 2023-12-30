@@ -64,18 +64,21 @@ router.post("/", async (req, res) => {
 
 //Se agrega al Carrito, un array de productos, que viene del body
 router.post("/:cid", async (req, res) => {
-  const products = req.body.products;
-  
   try {
-    //const carts = await cartsModel.create(cart);
+
+    const cid = req.params.cid;
+    const products = req.body;
+
     const carts = await cartManagerDB.updateCartMany(cid, products);
     res.send({
       status: "succes",
       msg: "Ruta POST CART",
       carts,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
+  } catch (error) {
+    console.error("Error fetching carts(1):", error);
+  // catch {
+  //   console.log("Error en lectura de archivos!!");
   }
 
 });
@@ -119,6 +122,22 @@ router.delete("/:cid", async (req, res) => {
     res.send({
       status: "succes",
       msg: `Ruta DELETE de CART con ID: ${cid}`,
+    });
+  } catch {
+    console.log("Error en lectura de archivos!!");
+  }
+
+});
+
+router.delete("/:cid/product/:pid", async (req, res) => {
+  const cid = req.params.cid;
+  const pid = req.params.pid;
+  try {
+    //let result = await cartsModel.deleteOne({_id:cid})
+    const result = await cartManagerDB.deleteProductCart(cid, pid)
+    res.send({
+      status: "succes",
+      msg: `Ruta DELETE de producto con ID ${pid} en el carrito con ID: ${cid} y `,
     });
   } catch {
     console.log("Error en lectura de archivos!!");
