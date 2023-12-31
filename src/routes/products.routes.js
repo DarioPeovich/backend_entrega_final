@@ -8,29 +8,44 @@ const router = Router();
 const productMangerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
+  
   try {
-    const { limit, page, sort, category, availability, query } = req.query;
-
-    const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
-    
-    const products = result.msg;
-
-    //Habilitar para la entrega
-    //res.render("products", {products} );
-
-    //Comentar
+    const products = await productMangerDB.getProducts();
     res.send({
       status: "succes",
       products,
     });
-    //-------------
+  } catch {
+    console.log("Error en lectura de archivos!!");
+    return res.status(400).send({ error: "Error en lectura de archivos" });
+        
+    }
+});
 
-     } catch (error) {
-      console.log("Error en lectura de archivos:", error);
-       return res.status(400).send({ error: "Error en lectura de archivos" });
-     }
+// router.get("/", async (req, res) => {
+//   try {
+//     const { limit, page, sort, category, availability, query } = req.query;
+
+//     const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
+    
+//     const products = result.msg;
+
+//     //Habilitar para la entrega
+//     //res.render("products", {products} );
+
+//     //Comentar
+//     res.send({
+//       status: "succes",
+//       products,
+//     });
+//     //-------------
+
+//      } catch (error) {
+//       console.log("Error en lectura de archivos:", error);
+//        return res.status(400).send({ error: "Error en lectura de archivos" });
+//      }
   
-  });
+//   });
 
 router.get("/:pid", async (req, res) => {
   const pid = req.params.pid;

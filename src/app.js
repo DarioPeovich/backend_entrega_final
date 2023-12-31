@@ -1,6 +1,8 @@
 import express from 'express';
 import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
+import {productViewsRouter} from "./routes/products.views.router.js"
+import {cartViewsRouter} from "./routes/cart.views.router.js"
 import mongoose from 'mongoose';
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
@@ -24,6 +26,7 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", __dirname + "/views");
 
+
 app.use(express.static(__dirname + "/public"));
 
 //Configurando Mono Atlas
@@ -33,6 +36,10 @@ const connection = mongoose.connect(MONGO);
 //Rutas
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
+
+//Rutas views
+app.use("/products", productViewsRouter);
+app.use("/carts", cartViewsRouter);
 
 //Ruta Chat
 app.use("/chat", viewsChatRouter);

@@ -1,0 +1,9 @@
+<div>
+    <h1>Productos en el Carrito</h1>
+    <ul>
+        {{#each productsAux}}
+            <li>
+                {{this.title}} {{this.description}} $ {{this.price}} Category: {{this.category}} Stock: {{this.stock}}
+        {{/each}}
+    </ul>
+</div>

@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
   try {
     //const carts = await cartsModel.find();
     const carts = await cartManagerDB.getCarts();
-    console.log(carts)
+    //console.log(carts)
     res.send({
       status: "succes",
       carts,

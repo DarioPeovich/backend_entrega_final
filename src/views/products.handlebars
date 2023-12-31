@@ -2,7 +2,8 @@
     <h1>Productos</h1>
     <ul>
         {{#each products.docs}}
-            <li>{{this.title}}: {{this.description}} {{this.price}} {{this.category}}</li>
+            <li>{{this.title}}: {{this.description}} ${{this.price}} Category: {{this.category}}</li>
+             <button onclick="">Agregar al carrito</button>
         {{/each}}
     </ul>
     <div>

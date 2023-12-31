@@ -13,7 +13,8 @@ class CartManagerDB {
 
   getIdCart = async (idCart) => {
     try {
-      const cart = await cartsModel.findById({ _id: idCart });
+      //const cart = await cartsModel.findById({ _id: idCart });
+      const cart = await cartsModel.findOne({ _id: idCart })
       return cart;
     } catch {}
   };

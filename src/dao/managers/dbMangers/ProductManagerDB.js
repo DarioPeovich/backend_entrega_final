@@ -37,7 +37,7 @@ class ProductManagerDB {
         //console.log(products);
 
     if(products.hasPrevPage){
-      products.prevLink = `http://localhost:8080/api/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+      products.prevLink = `http://localhost:8080/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
       //products.prevLink = `/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
   }
   
