@@ -22,30 +22,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const { limit, page, sort, category, availability, query } = req.query;
 
-//     const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
-    
-//     const products = result.msg;
-
-//     //Habilitar para la entrega
-//     //res.render("products", {products} );
-
-//     //Comentar
-//     res.send({
-//       status: "succes",
-//       products,
-//     });
-//     //-------------
-
-//      } catch (error) {
-//       console.log("Error en lectura de archivos:", error);
-//        return res.status(400).send({ error: "Error en lectura de archivos" });
-//      }
-  
-//   });
 
 router.get("/:pid", async (req, res) => {
   const pid = req.params.pid;
@@ -55,13 +32,18 @@ router.get("/:pid", async (req, res) => {
   
   try {
     const product = await productMangerDB.getProductById(pid);
+    
     res.send({
       status: "succes",
       msg: "Product hallado",
       product,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(404).send({
+        status: "error",
+        msg: error.message,
+    });
   }
 });
 
@@ -151,8 +133,12 @@ router.put("/:pid", async (req, res) => {
       msg: `Ruta PUT de PRODUCTS con ID: ${pid}`,
       result,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(404).send({
+        status: "error",
+        msg: error.message,
+    });
   }
 });
 

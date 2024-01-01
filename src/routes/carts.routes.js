@@ -28,18 +28,21 @@ router.get("/:cid", async (req, res) => {
   const cid = req.params.cid;
   
   try {
-    //const cart = await cartsModel.findById({ _id: cid });
+    
     const cart = await cartManagerDB.getIdCart(cid);
-
+ 
     res.send({
       status: "succes",
       msg: `Ruta GET ID CART con ID: ${cid}`,
       cart,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(404).send({
+        status: "error",
+        msg: error.message,
+    });
   }
-
 });
 
 //Se crea el Carrito, con array products vacio
@@ -75,12 +78,13 @@ router.post("/:cid", async (req, res) => {
       msg: "Ruta POST CART",
       carts,
     });
-  } catch (error) {
-    console.error("Error fetching carts(1):", error);
-  // catch {
-  //   console.log("Error en lectura de archivos!!");
+  }  catch (error) {
+    console.error("Error:", error.message);
+    res.status(404).send({
+        status: "error",
+        msg: error.message,
+    });
   }
-
 });
 
 router.post("/:cid/product/:pid", async (req, res) => {
@@ -97,22 +101,23 @@ router.post("/:cid/product/:pid", async (req, res) => {
             result,
           });
        }
-        catch {
-        //console.log("Error en lectura de archivos!!");
-        res.status(500).send({
-          status: "error",
-          msg: "Error interno del servidor al procesar la solicituud",
+       catch (error) {
+        console.error("Error:", error.message);
+        res.status(404).send({
+            status: "error",
+            msg: error.message,
         });
-      }
+    }
+
 });
 
-router.put("/:cid", async (req, res) => {
-  const cid = req.params.cid;
-  res.send({
-    status: "succes",
-    msg: `Ruta PUT de CART con ID: ${cid}`,
-  });
-});
+// router.put("/:cid", async (req, res) => {
+//   const cid = req.params.cid;
+//   res.send({
+//     status: "succes",
+//     msg: `Ruta PUT de CART con ID: ${cid}`,
+//   });
+// });
 
 router.delete("/:cid", async (req, res) => {
   const cid = req.params.cid;
@@ -123,8 +128,12 @@ router.delete("/:cid", async (req, res) => {
       status: "succes",
       msg: `Ruta DELETE de CART con ID: ${cid}`,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
+  } catch (error) {
+      console.error("Error:", error.message);
+      res.status(404).send({
+          status: "error",
+          msg: error.message,
+      });
   }
 
 });
@@ -139,9 +148,13 @@ router.delete("/:cid/product/:pid", async (req, res) => {
       status: "succes",
       msg: `Ruta DELETE de producto con ID ${pid} en el carrito con ID: ${cid} y `,
     });
-  } catch {
-    console.log("Error en lectura de archivos!!");
-  }
+  }  catch (error) {
+    console.error("Error:", error.message);
+    res.status(404).send({
+        status: "error",
+        msg: error.message,
+    });
+}
 
 });
 

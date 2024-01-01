@@ -72,28 +72,34 @@ class ProductManagerDB {
  
   getProductById = async (pid) => {
     try {
-      const result = await productsModel.findById(pid);
-      console.log(result);
-      if (result) {
-        return result;
-      }else {
-        return {};
+ 
+      const product = await productsModel.findById(pid);
+      console.log(product);
+      if ((product === null || product === undefined)) {
+        throw new Error(`No se encontró ningún Producto con el ID: ${pid}`);  //se lanza una excepcion, para capturarla desde el Route
       }
       
+      return product;
+      
     }
-    catch  {
-      console.log("Error en lectura de archivos (byId!!");
-    }
+    catch (error) {
+      throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+      }
 
   };
 
   updateProduct = async (pid, product) => {
     try {
+      const productFind = await productsModel.findById(pid);
+      if ((productFind === null || productFind === undefined)) {
+        throw new Error(`No se encontró ningún Producto con el ID: ${pid}`);  //se lanza una excepcion, para capturarla desde el Route
+      }
+
         const result = await productsModel.updateOne({ _id: pid }, { $set: product });
         return result;
-    } catch {
-
-    }
+    }     catch (error) {
+      throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+      }
     
   };
 

@@ -1,4 +1,9 @@
 import cartsModel from "../../models/carts.model.js";
+import { ProductManagerDB } from "./ProductManagerDB.js";
+import mongoose from 'mongoose';
+
+
+const productManagerDB = new ProductManagerDB();
 
 class CartManagerDB {
   getCarts = async () => {
@@ -15,8 +20,13 @@ class CartManagerDB {
     try {
       //const cart = await cartsModel.findById({ _id: idCart });
       const cart = await cartsModel.findOne({ _id: idCart })
+      if (!cart) {
+        throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
+      }
       return cart;
-    } catch {}
+    } catch (error) {
+      throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+      }
   };
 
   createCarts = async (cart) => {
@@ -31,17 +41,21 @@ class CartManagerDB {
     try {
       const cart = await cartsModel.findById({ _id: idCart });
       
-      if (!cart) {
-        
-        return res.status(404).send({
-          status: "error",
-          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
-        });
+      if (!cart) {  //Si no existe el carrito se envio error
+        //console.log("el id Carrito no existe")
+        throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
       }
-   
-    
-    const productIndex = cart.products.findIndex((product) => product.id === idProduct);
-    
+   //Se valida si existe el idproducto
+   const product = await productManagerDB.getProductById(idProduct)
+    if (!product) {
+      //console.log("El id. Prducto no existe")
+      throw new Error(`No se encontró ningún producto con el ID: ${idProduct}`);  //se lanza una excepcion, para capturarla desde el Route
+    }
+ 
+    const productIndex = cart.products.findIndex((productInCart) => {
+      return productInCart.product._id.toString() === idProduct.toString();
+    });
+
     if (productIndex >= 0) {
       cart.products[productIndex].quantity += quantity;
     } else {
@@ -53,26 +67,41 @@ class CartManagerDB {
     }
     const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
     return result
-  } catch {"Error en BD!!"}
+  } catch (error) {
+    throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+    }
   };
 
 updateCartMany = async (idCart, products) => {
-    //Products: array de productos, que contendra el id del producto y la quantity
-    console.log("idCart:" + idCart)
-    console.log(...products)
+    
+    // console.log("idCart:" + idCart)
+    // console.log(...products)
     try {
       const cart = await cartsModel.findById({ _id: idCart });
       
       if (!cart) {
-        
-        return res.status(404).send({
-          status: "error",
-          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
-        });
+        throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
+        // return res.status(404).send({
+        //   status: "error",
+        //   msg: `No se encontró ningún carrito con el ID: ${idCart}`,
+        // });
       }
-     // products.array.forEach(productArray => { //forEach no permite el await dentro de su bloque de iteracion
+      //Se valida que los productos existan en la BD
+      for (const productArray of products) {
+        //Se valida la existencia del producto 
+        const product = await productManagerDB.getProductById(productArray.idProduct)
+        if (!product) {
+          throw new Error(`No se encontro en la BD un producto con el ID: ${productArray.idProduct}. Se aborta operacion completa!.`);  //se lanza una excepcion, para capturarla desde el Route
+   
+        }
+      }
+      // products.array.forEach(productArray => { //forEach no permite el await dentro de su bloque de iteracion
+
     for (const productArray of products) {
-      const productIndex = cart.products.findIndex((product) => product.product.toString() === productArray.idProduct.toString())   //Hasta que no le puse toString(), no anduvo !!! (pero xq?)
+      
+      const productIndex = cart.products.findIndex((productInCart) => {
+        return productInCart.product._id.toString() === productArray.idProduct.toString();
+      });
       if (productIndex >= 0) {
         cart.products[productIndex].quantity += productArray.quantity;
       } else {
@@ -84,8 +113,10 @@ updateCartMany = async (idCart, products) => {
       }
       const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
     };
-    return result
-  } catch {"Error en BD!!"}
+    //return result
+  } catch (error) {
+    throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+ }
   };
   //----Fin "updateCartMany": metodo para agregar array de productos desde body
 
@@ -93,40 +124,45 @@ updateCartMany = async (idCart, products) => {
     try {
       const cart = await this.getIdCart(idCart)
       if (!cart) { 
-        return res.status(404).send({
-          status: "error",
-          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
-        });
+        throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
+        // return res.status(404).send({
+        //   status: "error",
+        //   msg: `No se encontró ningún carrito con el ID: ${idCart}`,
+        // });
       }
-      
+      cart.products = [];
       //const result = await cart.save();
       const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
       //const result = await cartsModel.deleteOne({ _id: idCart });
       return result;
-    } catch {
-
-    }
+    } catch (error) {
+        throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+     }
   }
 
   deleteProductCart = async (idCart, idProduct) => {
     try {
       const cart = await this.getIdCart(idCart)
       if (!cart) { 
-        return res.status(404).send({
-          status: "error",
-          msg: `No se encontró ningún carrito con el ID: ${idCart}`,
-        });
+        throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
       }
-      const productIndex = cart.products.findIndex((product) => product.id === idProduct);
+      //const productIndex = cart.products.findIndex((product) => product.id === idProduct);
+      const productIndex = cart.products.findIndex((productInCart) => {
+        return productInCart.product._id.toString() === idProduct.toString();
+      });
+
+      if (productIndex === -1) {
+        throw new Error(`No se encontró en el carrito con el ID: ${idCart}, el producto a borrar con id.: ${idProduct}`);  //se lanza una excepcion, para capturarla desde el Route
+      }
       cart.products.splice(productIndex, 1)
 
       //const result = await cart.save();
       const result = await cartsModel.updateOne({_id:idCart},{$set:cart});
-      //const result = await cartsModel.deleteOne({ _id: idCart });
+      
       return result;
-    } catch {
-
-    }
+    } catch (error) {
+      throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+  }
   }
 
 } //Fin Clase CartManagerDB
