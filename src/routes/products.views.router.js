@@ -10,8 +10,6 @@ const productMangerDB = new ProductManagerDB();
 router.get("/", async (req, res) => {
     try {
 
-      console.log("entre");
-
       const { limit, page, sort, category, availability, query } = req.query;
       
       const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);

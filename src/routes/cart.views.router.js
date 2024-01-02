@@ -29,7 +29,8 @@ router.get("/:cid", async (req, res) => {
                 status: producto.product.status,
                 stock: producto.product.stock,
                 category: producto.product.category,
-                thumbnails: producto.product.thumbnails
+                thumbnails: producto.product.thumbnails,
+                quantity: producto.quantity
             }
             return (prod);
         })
