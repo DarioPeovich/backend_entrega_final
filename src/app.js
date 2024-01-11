@@ -1,15 +1,20 @@
 import express from 'express';
 import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
-import {productViewsRouter} from "./routes/products.views.router.js"
-import {cartViewsRouter} from "./routes/cart.views.router.js"
+//import {productViewsRouter} from "./routes/products.views.router.js"
+//import {cartViewsRouter} from "./routes/cart.views.router.js"
+import { viewsRouter } from './routes/views.router.js';
+import session from "express-session";
+import sessionRouter from './routes/sessions.routes.js'
+
+
 import mongoose from 'mongoose';
+import MongoStore from "connect-mongo";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import __dirname from "./utils.js";
-import viewsChatRouter from "./routes/views.chat.router.js"; //to do
+//import viewsChatRouter from "./routes/views.chat.router.js"; //to do
 import messagesModel from './dao/models/messages.model.js';
-
 
 const PORT = 8080;
 let messages = [];
@@ -33,16 +38,31 @@ app.use(express.static(__dirname + "/public"));
 const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";
 const connection = mongoose.connect(MONGO);
 
+
+app.use(session({
+    store: new MongoStore({
+        mongoUrl: MONGO,
+        ttl:3600
+    }),
+    secret:"CoderSecret",
+    resave:false,
+    saveUninitialized:false
+}))
+
+
 //Rutas
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
+app.use('/api/sessions', sessionRouter);
 
 //Rutas views
-app.use("/products", productViewsRouter);
-app.use("/carts", cartViewsRouter);
+app.use("/", viewsRouter);
+//Todas estas rutas se agruparon en views.router.js
+// app.use("/products", productViewsRouter);    //03/01/24: Se cambio a productRouter. Tutor Juanma aconsejo no tener dos .js de router
+//app.use("/carts", cartViewsRouter);   //03/01/24: Se cambio a cartRouter. Tutor Juanma aconsejo no tener dos .js de router
+//app.use("/carts", cartRouter);
+// app.use("/chat", viewsChatRouter);
 
-//Ruta Chat
-app.use("/chat", viewsChatRouter);
 
 //Configuracion websocket
 const io = new Server(httpServer);

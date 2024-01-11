@@ -3,10 +3,13 @@ import { Router } from "express";
 import { ProductManagerDB } from "../dao/managers/dbMangers/ProductManagerDB.js";
 
 
+
 const router = Router();
 
-
+//
 const productMangerDB = new ProductManagerDB();
+
+//03/01/24: Este endPoint se paso a productRouter.js no tenia sentido tenerlo separado
 router.get("/", async (req, res) => {
     try {
 

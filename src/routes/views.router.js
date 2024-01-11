@@ -1,12 +1,18 @@
 import { Router } from "express";
 import { CartManagerDB } from "../dao/managers/dbMangers/CartManagerDB.js";
+import { ProductManagerDB } from "../dao/managers/dbMangers/ProductManagerDB.js";
+import messagesModel from "../dao/models/messages.model.js"
 
 //import cartsModel from "../dao/models/carts.model.js";
 //03/01/2024 Segun Juanma esto tendria que estar dentro de carts.router.js y es logico. Pero como seria la ruta???
 const cartManagerDB = new CartManagerDB();
+const productMangerDB = new ProductManagerDB();
+
 //03/01/24: Este endPoint se paso a carts.routes.js y se cambia en app.js la ruta del Route
 const router = Router();
-router.get("/:cid", async (req, res) => {
+
+//Rutas Carrito
+router.get("/carts/:cid", async (req, res) => {
     const cid = req.params.cid;
     
     try {
@@ -54,4 +60,74 @@ router.get("/:cid", async (req, res) => {
   
   });
   
-export { router as cartViewsRouter };
+  //Router Productos
+  router.get("/products", async (req, res) => {
+    try {
+
+      const { limit, page, sort, category, availability, query } = req.query;
+      
+      const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
+      
+      const products = result.msg;
+  
+      //Habilitar para la entrega
+      res.render("products", {products, user:req.session.user} );
+  
+      //Comentar, solo para pruebas
+      // res.send({
+      //   status: "succes",
+      //   products,
+      // });
+      //-------------
+  
+       } catch (error) {
+        console.log("Error en lectura de archivos:", error);
+         return res.status(400).send({ error: "Error en lectura de archivos" });
+       }
+    
+    });
+
+    //Rutas Chat
+    router.get("/chat", (req,res)=>{
+      res.render("chat", {});
+  })
+  
+  router.get("/chat/list", async (req,res)=>{
+      try {
+          let chats = await messagesModel.find();
+          res.send({
+            status: "succes",
+            chats,
+          });
+        } catch {
+          console.log("Error en lectura de archivos!!");
+        }
+  
+      //res.render("chat", {});
+  })
+
+  //Rutas Sessions
+  const publicAccess = (req,res,next) =>{
+    if(req.session.user){
+        return res.redirect('/');
+    }
+    next();
+}
+const privateAccess = (req,res,next) =>{
+    if(!req.session.user){
+        return res.redirect('/login');
+    }
+    next();
+}
+
+router.get('/register', publicAccess, (req,res)=>{
+    res.render('register')
+});
+router.get('/login', publicAccess, (req,res)=>{
+    res.render('login')
+})
+router.get('/',privateAccess, (req,res)=>{
+    res.render('profile', {user:req.session.user})
+})
+
+export { router as viewsRouter };
