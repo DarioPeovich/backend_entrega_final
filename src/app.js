@@ -6,6 +6,7 @@ import { productRouter } from './routes/products.routes.js';
 import { viewsRouter } from './routes/views.router.js';
 import session from "express-session";
 import sessionRouter from './routes/sessions.routes.js'
+import passport from 'passport';
 
 
 import mongoose from 'mongoose';
@@ -15,6 +16,7 @@ import { Server } from "socket.io";
 import __dirname from "./utils.js";
 //import viewsChatRouter from "./routes/views.chat.router.js"; //to do
 import messagesModel from './dao/models/messages.model.js';
+import inicializePassport from './config/passport.config.js';
 
 const PORT = 8080;
 let messages = [];
@@ -48,6 +50,11 @@ app.use(session({
     resave:false,
     saveUninitialized:false
 }))
+
+//Inicializacion de estrategias de autenticacion
+inicializePassport()
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //Rutas
