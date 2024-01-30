@@ -29,7 +29,11 @@ class CartManagerDB {
       }
   };
 
-  createCarts = async (cart) => {
+  createCarts = async () => {
+    const cart = {
+      products: [],
+      quantity:0
+    };
     try {
       const carts = await cartsModel.create(cart);
       return carts;

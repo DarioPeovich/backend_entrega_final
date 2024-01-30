@@ -93,13 +93,13 @@ router.get("/:cid", async (req, res) => {
 
 //Se crea el Carrito, con array products vacio
 router.post("/", async (req, res) => {
-  const cart = {
-    products: [],
-  };
+  // const cart = {
+  //   products: [],
+  // };
   
   try {
     //const carts = await cartsModel.create(cart);
-    const carts = await cartManagerDB.createCarts(cart);
+    const carts = await cartManagerDB.createCarts();
     res.send({
       status: "succes",
       msg: "Ruta POST CART",
