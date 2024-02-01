@@ -85,6 +85,21 @@ router.get("/failregister", async (req,res)=>{
             message:"Mi primer Login!!"
         })
     }) */
+    
+router.get("/current", async (req,res)=>{
+    const user = req.session.user;
+    if (!user) {
+        res.send({
+            status: "error",
+            msg: "No hay usuario activo"
+        });
+    }
+    res.send({
+        status: "succes",
+        msg: "Usuario actual",
+        user
+      });
+})
 
 router.post("/login", passport.authenticate("login", {failureRedirect:'/api/session/faillogin'}),
 async (req,res) =>{ 
@@ -95,7 +110,8 @@ async (req,res) =>{
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         age:req.user.age,
-        email:req.user.email
+        email:req.user.email,
+        role: req.user.role
     }
     res.send({status:"success", payload:req.user})
 })
@@ -115,6 +131,7 @@ router.get('/logout', (req,res)=>{
         res.redirect('/login')
     })
 })
+
 
 router.post("/restartPassword", async (req,res)=>{
     const {email,password} = req.body;
