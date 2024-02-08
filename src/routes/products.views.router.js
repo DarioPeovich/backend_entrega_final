@@ -2,6 +2,11 @@ import { Router } from "express";
 
 import { ProductManagerDB } from "../dao/managers/dbMangers/ProductManagerDB.js";
 
+//****************************************************************************************************** */
+
+//********  08/02/24 .JS ENDPOINT DEPRECADO. SE DEJA POR BACKUP. PRONTO DERA ELIMINADO  ****************
+
+//****************************************************************************************************** */
 
 
 const router = Router();

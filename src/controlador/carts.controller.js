@@ -4,7 +4,7 @@ const cartManagerDB = new CartManagerDB();
 
 class CartsController{ 
 
-    static getProductId = async (req, res) => {
+    static getProductsCartId = async (req, res) => {
 
         const cid = req.params.cid;
         
@@ -53,7 +53,7 @@ class CartsController{
       
       }
      
-     static getProducts = async (req, res) => {
+     static getCarts = async (req, res) => {
  
         try {
           //const carts = await cartsModel.find();
@@ -170,6 +170,6 @@ class CartsController{
       }
       
       }
-       
+
 }
 export {CartsController}

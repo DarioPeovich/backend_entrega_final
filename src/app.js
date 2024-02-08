@@ -1,8 +1,6 @@
 import express from 'express';
 import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
-//import {productViewsRouter} from "./routes/products.views.router.js"
-//import {cartViewsRouter} from "./routes/cart.views.router.js"
 import { viewsRouter } from './routes/views.router.js';
 import session from "express-session";
 import sessionRouter from './routes/sessions.routes.js'

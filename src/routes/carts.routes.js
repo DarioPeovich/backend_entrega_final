@@ -8,9 +8,9 @@ import {CartsController} from "../controlador/carts.controller.js"
 
 const router = Router();
 
-router.get("/:cid", CartsController.getProductId);
+router.get("/:cid", CartsController.getProductsCartId);
 
-router.get("/", CartsController.getProducts);
+router.get("/", CartsController.getCarts);
 
 
 //Se crea el Carrito, con array products vacio
