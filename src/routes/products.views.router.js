@@ -9,7 +9,7 @@ const router = Router();
 //
 const productMangerDB = new ProductManagerDB();
 
-//03/01/24: Este endPoint se paso a productRouter.js no tenia sentido tenerlo separado
+//03/01/24: Este endPoint se paso a productRouter.js no tenia sentido tenerlo separado  07/02/24 mmm Tiene que estar acá, o si no pasar a views,router.js
 router.get("/", async (req, res) => {
     try {
 

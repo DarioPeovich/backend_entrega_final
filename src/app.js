@@ -7,7 +7,7 @@ import { viewsRouter } from './routes/views.router.js';
 import session from "express-session";
 import sessionRouter from './routes/sessions.routes.js'
 import passport from 'passport';
-
+import { config } from './config/config.js';
 
 import mongoose from 'mongoose';
 import MongoStore from "connect-mongo";
@@ -18,7 +18,7 @@ import __dirname from "./utils.js";
 import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
 
-const PORT = 8080;
+const PORT = config.server.port     //8080;
 let messages = [];
 
 const app = express();
@@ -37,7 +37,8 @@ app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/public"));
 
 //Configurando Mono Atlas
-const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";
+//const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";
+const MONGO =  config.mongo.url;
 const connection = mongoose.connect(MONGO);
 
 
@@ -46,7 +47,7 @@ app.use(session({
         mongoUrl: MONGO,
         ttl:3600
     }),
-    secret:"CoderSecret",
+    secret:config.session.secret,    //"CoderSecret",
     resave:false,
     saveUninitialized:false
 }))
@@ -64,12 +65,6 @@ app.use('/api/sessions', sessionRouter);
 
 //Rutas views
 app.use("/", viewsRouter);
-//Todas estas rutas se agruparon en views.router.js
-// app.use("/products", productViewsRouter);    //03/01/24: Se cambio a productRouter. Tutor Juanma aconsejo no tener dos .js de router
-//app.use("/carts", cartViewsRouter);   //03/01/24: Se cambio a cartRouter. Tutor Juanma aconsejo no tener dos .js de router
-//app.use("/carts", cartRouter);
-// app.use("/chat", viewsChatRouter);
-
 
 //Configuracion websocket
 const io = new Server(httpServer);
