@@ -16,7 +16,7 @@ import __dirname from "./utils.js";
 import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
 
-const PORT = config.server.port     //8080;
+const PORT = config.server.port;     //8080;
 let messages = [];
 
 const app = express();
@@ -36,9 +36,9 @@ app.use(express.static(__dirname + "/public"));
 
 //Configurando Mono Atlas
 //const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";
-const MONGO =  config.mongo.url;
-const connection = mongoose.connect(MONGO);
+//const connection = mongoose.connect(MONGO);  //pasado a dbConnections.js 09/02/24
 
+const MONGO =  config.mongo.url;
 
 app.use(session({
     store: new MongoStore({

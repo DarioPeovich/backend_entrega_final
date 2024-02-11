@@ -1,9 +1,5 @@
 import cartsModel from "../../models/carts.model.js";
-import { ProductManagerDB } from "./ProductManagerDB.js";
-import mongoose from 'mongoose';
-
-
-const productManagerDB = new ProductManagerDB();
+import { productsDao } from "../../index.js";
 
 class CartManagerDB {
   getCarts = async () => {
@@ -50,7 +46,9 @@ class CartManagerDB {
         throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
       }
    //Se valida si existe el idproducto
-   const product = await productManagerDB.getProductById(idProduct)
+   const product = await productsDao.getProductById(idProduct)
+   
+   
     if (!product) {
       //console.log("El id. Prducto no existe")
       throw new Error(`No se encontró ningún producto con el ID: ${idProduct}`);  //se lanza una excepcion, para capturarla desde el Route
@@ -93,7 +91,9 @@ updateCartMany = async (idCart, products) => {
       //Se valida que los productos existan en la BD
       for (const productArray of products) {
         //Se valida la existencia del producto 
-        const product = await productManagerDB.getProductById(productArray.idProduct)
+        //const product = await productManagerDB.getProductById(productArray.idProduct) // 09/04/24 Cambiado por Dao
+        const product = await productsDao.getProductById(productArray.idProduct)
+        
         if (!product) {
           throw new Error(`No se encontro en la BD un producto con el ID: ${productArray.idProduct}. Se aborta operacion completa!.`);  //se lanza una excepcion, para capturarla desde el Route
    

@@ -1,10 +1,6 @@
-import { CartManagerDB } from "../dao/managers/dbMangers/CartManagerDB.js";
-import { ProductManagerDB } from "../dao/managers/dbMangers/ProductManagerDB.js";
 import messagesModel from "../dao/models/messages.model.js"
-
-//import cartsModel from "../dao/models/carts.model.js";
-const cartManagerDB = new CartManagerDB();
-const productMangerDB = new ProductManagerDB();
+import { cartsDao } from "../dao/index.js"
+import { productsDao } from "../dao/index.js";
 
 class ViewsController{ 
 
@@ -13,8 +9,7 @@ class ViewsController{
         const cid = req.params.cid;
         
         try {
-          //const cart = await cartsModel.findById({ _id: cid });
-          const cart = await cartManagerDB.getIdCart(cid);
+          const cart = await cartsDao.getIdCart(cid);
             // console.log("---Cart---")
             // console.log(cart)
             const products = cart.products;
@@ -63,8 +58,7 @@ class ViewsController{
     
           const { limit, page, sort, category, availability, query } = req.query;
           
-          const result = await productMangerDB.getProducts(limit,page,sort,category,availability,query);
-          
+          const result = await productsDao.getProducts(limit,page,sort,category,availability,query);
           const products = result.msg;
       
           //Habilitar para la entrega
