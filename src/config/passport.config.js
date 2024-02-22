@@ -3,12 +3,22 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 
 import userModel from '../dao/models/users.model.js'
-//import cartsModel from "../dao/models/carts.model.js";
+//No me funciona cambiar el uso directo de userModel por UserController
+//import { UserController } from "../controlador/user.controller.js";
+//--Para pruebas
+//import { UserManagerDB } from "../dao/managers/dbMangers/userManager.js";
+//--Fin para pruebas 21/02/24
 import {CartManagerDB} from "../dao/managers/dbMangers/CartManagerDB.js"
 
 import {createHash, validatePassword} from "../utils.js";
 
 const cartManagerDB = new CartManagerDB();
+
+//--a continuacion Instancia de prueba. No funciona 21/02/24
+//const userController = new UserController();
+//--Instancia de prueba xq no anda el use controller
+//const useManagerDb = new UserManagerDB();
+//--Hasta lineas de pruebas
 
 const LocalStrategy = local.Strategy;
 
@@ -21,6 +31,7 @@ const inicializePassport = () => {
         try {
             
             let user = await userModel.findOne({email:username});
+            
             if(user){
                 console.log('Usuario ya registrado');
                 return done(null,false)
@@ -49,7 +60,13 @@ const inicializePassport = () => {
     {usernameField:"email"},
     async (username, password, done)=>{
         try {
-            const user = await userModel.findOne({email:username})
+            //1ra. linea es el original que anda 21/02/24
+             const user = await userModel.findOne({email:username})
+            //Todas estas pruebas no me funcionan 21/02/24
+             // const user = await userController.getEmailUser(username);
+            //console.log("UserName: " + JSON.stringify(useManagerDb))
+            //const user = await useManagerDb.getEmailUser(username);
+            
             if(!user){
                 return done(null, false);
             }

@@ -124,6 +124,7 @@ updateCartMany = async (idCart, products) => {
   };
   //----Fin "updateCartMany": metodo para agregar array de productos desde body
 
+  //deleteCart: Vacia el carrito de Producto. No lo borra de la BD.
   deleteCart = async (idCart) => {
     try {
       const cart = await this.getIdCart(idCart)

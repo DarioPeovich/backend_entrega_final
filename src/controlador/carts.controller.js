@@ -1,4 +1,6 @@
-import { cartsDao } from "../dao/index.js"
+// import { cartsDao } from "../dao/index.js"   //21/04/24
+import { cartService } from "../dao/repository/index.js";
+
 
 class CartsController{ 
 
@@ -9,7 +11,8 @@ class CartsController{
         try {
           
           //const cart = await cartManagerDB.getIdCart(cid);  //Reemplazado x cartsDao 10/02/24
-          const cart = await cartsDao.getIdCart(cid);
+          //  const cart = await cartsDao.getIdCart(cid);  //21/02/24
+          const cart = await cartService.getIdCart(cid);
           
             // console.log("---Cart---")
             // console.log(cart)
@@ -47,8 +50,8 @@ class CartsController{
         //     productsAux
         //   });
             //-------Fin solo para pruebas
-        } catch {
-          console.log("Error en lectura de archivos!!");
+        } catch (error){
+          console.log("Error en lectura de archivos!!. Error:" + error);
         }
       
       }
@@ -58,14 +61,20 @@ class CartsController{
         try {
           //const carts = await cartsModel.find();
           //const carts = await cartManagerDB.getCarts();   //Cambiado por cartsDao 10/02/24
-          const carts = await cartsDao.getCarts();
-          //console.log(carts)
+          // const carts = await cartsDao.getCarts();  
+          const carts = await cartService.getCarts();
+          
+          console.log("En  CartsController: " + carts)
           res.send({
             status: "succes",
             carts,
           });
-        } catch {
-          console.log("Error en lectura de archivos!!");
+        } catch (error) {
+          console.log("Error en lectura de archivos!!. Error ==> " + error);
+          res.send({
+            status: "Error: " + error,
+
+        })
         }
       }
 
@@ -77,11 +86,13 @@ class CartsController{
         try {
           //const carts = await cartsModel.create(cart);
           //const carts = await cartManagerDB.createCarts();  //Cambiado por cartsDao  10/02/24
-          const carts = await cartsDao.createCarts();
+          // const carts = await cartsDao.createCarts();    21/02/24
+          const cart = await cartService.createCarts();
+
           res.send({
             status: "succes",
             msg: "Ruta POST CART",
-            carts,
+            cart,
           });
         } catch {
           console.log("Error en lectura de archivos!!");
@@ -96,7 +107,8 @@ class CartsController{
           const products = req.body;
       
           //const carts = await cartManagerDB.updateCartMany(cid, products);  //Cambiado por cartsDao 10/04/24
-          const carts = await cartsDao.updateCartMany(cid, products);
+          // const carts = await cartsDao.updateCartMany(cid, products);    21/02/24
+          const carts = await cartService.updateCartMany(cid, products);
           res.send({
             status: "succes",
             msg: "Ruta POST CART",
@@ -118,7 +130,9 @@ class CartsController{
         const quantity = req.body.quantity;
           try {
               //const result = await cartManagerDB.updateCart(cid, pid, quantity);  //Cambiado x cartsDao  10/02/24
-              const result = await cartsDao.updateCart(cid, pid, quantity);
+              // const result = await cartsDao.updateCart(cid, pid, quantity);
+              const result = await cartService.updateCart(cid, pid, quantity);
+
               //console.log(result);
               res.send({
                   status: "succes",
@@ -141,7 +155,8 @@ class CartsController{
         try {
           //let result = await cartsModel.deleteOne({_id:cid})
           //const result = await cartManagerDB.deleteCart(cid)    //Cambiado x cartsDao 10/02/24
-          const result = await cartsDao.deleteCart(cid)
+          // const result = await cartsDao.deleteCart(cid)  //21/02/24
+          const result = await cartService.deleteCart(cid);
           res.send({
             status: "succes",
             msg: `Ruta DELETE de CART con ID: ${cid}`,
@@ -162,7 +177,8 @@ class CartsController{
         try {
           //let result = await cartsModel.deleteOne({_id:cid})
           //const result = await cartManagerDB.deleteProductCart(cid, pid);  //cambiado x cartsDao 10/02/24
-          const result = await cartsDao.deleteProductCart(cid, pid);
+          // const result = await cartsDao.deleteProductCart(cid, pid);
+          const result = await cartService.deleteCart(cid);
           res.send({
             status: "succes",
             msg: `Ruta DELETE de producto con ID ${pid} en el carrito con ID: ${cid} y `,

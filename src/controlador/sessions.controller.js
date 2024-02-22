@@ -1,5 +1,4 @@
 
-
 class SessionsController{ 
 
     static sessionsRegister = async (req,res) => {
@@ -13,6 +12,7 @@ class SessionsController{
 
     static sessionsCurrent = async (req,res)=>{
         const user = req.session.user;
+        
         if (!user) {
             res.send({
                 status: "error",
