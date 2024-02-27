@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {CartsController} from "../controlador/carts.controller.js"
+import { checkRole } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -12,12 +13,14 @@ router.get("/", CartsController.getCarts);
 router.post("/", CartsController.createCart);
 
 //Se agrega al Carrito, un array de productos, que viene del body
-router.post("/:cid", CartsController.cartManyProducts);
+router.post("/:cid", checkRole(["USER"]), CartsController.cartManyProducts);
 
-router.post("/:cid/product/:pid", CartsController.cartAgregateProduct);
+router.post("/:cid/product/:pid", checkRole(["USER"]), CartsController.cartAgregateProduct);
 
 router.delete("/:cid", CartsController.cartDelete);
 
 router.delete("/:cid/product/:pid", CartsController.cartProductDelete);
+
+router.post("/:cid/purchase",CartsController.purchase);
 
 export { router as cartRouter };

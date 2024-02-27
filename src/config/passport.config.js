@@ -46,6 +46,7 @@ const inicializePassport = () => {
                 age,
                 cart: cart._id,
                 password: createHash(password)
+                //rol, ya está por default en schema userModel
             }
             const result = await userModel.create(newUser);
             return done (null, result);
@@ -59,6 +60,7 @@ const inicializePassport = () => {
     passport.use("login", new LocalStrategy(
     {usernameField:"email"},
     async (username, password, done)=>{
+        //console.log(username + " // " + password)
         try {
             //1ra. linea es el original que anda 21/02/24
              const user = await userModel.findOne({email:username})

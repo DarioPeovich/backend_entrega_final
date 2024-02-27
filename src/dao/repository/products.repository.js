@@ -12,11 +12,11 @@ export class ProductsRepository {
         }
     }
 
-    async createProduct (prod) {
+    async createProduct (productData) {
         try {
-            const product = await this.dao.createProduct(prod);
-            //console.log(product)
-            return product;
+            const updatedProduct = await this.dao.createProduct(productData);
+            //console.log(updatedProduct)
+            return updatedProduct;
         } catch (error) {
             throw error;
         }
@@ -32,11 +32,11 @@ export class ProductsRepository {
         }
     }
 
-    async updateProduct (pid, product) {
+    async updateProduct (pid, productData) {
         try {
-            const product = await this.dao.updateProduct(pipid, productd);
-            //console.log(product)
-            return product;
+            const updatedProduct = await this.dao.updateProduct(pid, productData);
+            //console.log(updatedProduct)
+            return updatedProduct;
         } catch (error) {
             throw error;
         }

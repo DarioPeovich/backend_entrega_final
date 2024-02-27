@@ -1,6 +1,9 @@
 // import { cartsDao } from "../dao/index.js"   //21/04/24
 import { cartService } from "../dao/repository/index.js";
-
+import { productsService } from "../dao/repository/index.js";
+import productsModel from "../dao/models/products.model.js";
+import { v4 as uuidv4 } from "uuid";
+import { ticketsModel } from "../dao/models/ticket.model.js";
 
 class CartsController{ 
 
@@ -64,7 +67,7 @@ class CartsController{
           // const carts = await cartsDao.getCarts();  
           const carts = await cartService.getCarts();
           
-          console.log("En  CartsController: " + carts)
+          //console.log("En  CartsController: " + carts)
           res.send({
             status: "succes",
             carts,
@@ -192,6 +195,99 @@ class CartsController{
       }
       
       }
+      //--purchase
+      static purchase = async (req,res) => {
+        try {
+            const cartId = req.params.cid;
+            const cart = await cartService.getIdCart(cartId);
+            //console.log("Entre a carts.controllers.js => purchase", cartId)
+            if(cart){
+                if(!cart.products.length){
+                    return res.send("es necesario que agrege productos antes de realizar la compra")
+                }
+                const ticketProducts = [];
+                const rejectedProducts = [];
+
+                for(let i=0; i<cart.products.length;i++){
+                    const cartProduct = cart.products[i];
+                    
+                    // console.log(JSON.stringify(cart.products[i].product._id,null,'\t'));
+                    const productId = cart.products[i].product._id;   //Esto pasa porque se usa populate en el models para enlazar el objeto Product segun su Id
+                    //const productDB = await productsModel.findById(cartProduct.id);   //22/02/24
+                    const productDB = await productsService.getProductById(productId);
+
+                    //comparar la cantidad de ese producto en el carrito con el stock del producto
+                    if(cartProduct.quantity<=productDB.stock){
+                        ticketProducts.push(cartProduct);
+                    } else {
+                        rejectedProducts.push(cartProduct);
+                    }
+                }
+
+                console.log("ticketProducts",ticketProducts);
+                console.log("rejectedProducts",rejectedProducts);
+                const totalTicket = await CartsController.totalTicket(ticketProducts);
+                const newTicket = {
+                    code:uuidv4(),
+                    purchase_datetime: new Date(),   //.toLocaleString(),
+                    amount:totalTicket,
+                    purchaser:req.user.email   
+                }
+                const ticketCreated = await ticketsModel.create(newTicket);
+                //console.log("carts.controllers.js => purchase", ticketCreated);
+                const resultStk = await CartsController.actualizarStock(ticketProducts);    //Se actualiza el Stock de los articulos
+                const resultCartAct = await CartsController.actualizarCart(cartId, ticketProducts, rejectedProducts);   //Se borra los productos que se incluyeron  en el Ticket
+                res.send({status:"success", ticketCreated, rejectedProducts})
+            } else {
+                res.send("el carrito no existe")
+            }
+        } catch (error) {
+            res.send(error.message)
+        }
+    }
+    
+    static actualizarStock = async (ticketProducts) => {
+      ticketProducts.forEach(async (product) => { // Utiliza async aquí para poder usar await dentro de la función de devolución de llamada
+        try {
+          const productDB = await productsService.getProductById(product.product); 
+          productDB.stock -= product.quantity;
+          // Llama a la función updateProduct
+          const result = await productsService.updateProduct(productDB._id, productDB);
+          console.log(`Stock actualizado para ${productDB.title}`);
+        } catch (error) {
+          console.error(`Error actualizando el stock para ${product.title}: ${error.message}`);
+        }
+      });
+    };
+    
+    static actualizarCart = async (cartId, ticketProducts) => {
+      try {
+        //Se borran los productos que fueron incluidos en el ticket
+        ticketProducts.forEach(async (product) => {
+          const result = await cartService.deleteProductCart(cartId, product.product._id)   
+        })
+
+      } catch (error) {
+        console.error(`Error actualizando el stock para  ${error.message}`);
+        throw error;
+      }
+    
+    }
+    
+    static totalTicket = async (ticketProducts) => {
+      try {
+          let totalTicket = 0;
+          ticketProducts.forEach(async (product) => {
+            totalTicket += product.quantity * product.product.price;
+            // console.log("totalTicket:", totalTicket);
+          });
+          return totalTicket;
+      } catch (error) {
+        throw error;
+      }
+    }
 
 }
 export {CartsController}
+
+

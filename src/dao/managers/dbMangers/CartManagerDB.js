@@ -1,3 +1,4 @@
+import productsModel from "../../models/products.model.js";
 import cartsModel from "../../models/carts.model.js";
 import { productsDao } from "../../index.js";
 
@@ -13,15 +14,24 @@ class CartManagerDB {
   };
 
   getIdCart = async (idCart) => {
+    
     try {
-      //const cart = await cartsModel.findById({ _id: idCart });
-      const cart = await cartsModel.findOne({ _id: idCart })
+      //Si no tiene lean NO ANDA HANDLEBARS, EL PROFESOR LO DIJO EN CLASES Y YO NO LO HICE. RENEGUE DOS DIAS COMPLETOS
+       //const cart = await cartsModel.findById(idCart).lean();
+       const cart = await cartsModel.findById(idCart)
+          .lean()
+        .populate({
+           path: 'products.product',
+          model: productsModel
+       });
       if (!cart) {
         throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
       }
       return cart;
+      
     } catch (error) {
-      throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+      console.error("Error en CartManagerDB.js getIdCart:", error);
+      throw error;
       }
   };
 

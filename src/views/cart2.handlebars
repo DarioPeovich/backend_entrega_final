@@ -1,0 +1,38 @@
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <h1>Carrito de Compras</h1>
+
+      {{!-- <p id="cartId" value={{cart_id}}>Identificador del carrito: {{cart._id}}</p> --}}
+      <p id="cartId" data-cart-id="{{cart._id}}">Identificador del carrito: {{cart._id}}</p>
+
+      
+      <ul >
+        {{#each cart.products}}
+          <li >
+            <p>Producto: {{this.product.title}} ({{this.product.description}})</p>
+            <span>Id: {{this.product._id}}</span>
+            <span>Cantidad: {{this.quantity}} Precio: ${{this.product.price}}  Stock: {{this.product.stock}}</span>
+            
+          </li>
+        {{/each}}
+      </ul>
+    {{!-- <form action="/api/carts/{{cart.id}}/purchase" method="post">
+        <button type="submit">Comprar</button>
+    </form> --}}
+    <div>
+        <form id="purchaseForm" >
+            {{!-- <label>Cart Id.</label> --}}
+            {{!-- <input name="cart_id"> --}}
+            <button type="submit">Terminar Compra</button>
+            {{!-- (Ingresar id. del carrito a cerrar la Compra) --}}
+        </form>
+
+    </div>
+    <script src="/js/cart2.js"></script>
+  </body>
+</html>

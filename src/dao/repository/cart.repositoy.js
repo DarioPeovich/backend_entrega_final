@@ -57,12 +57,19 @@ export class CartRepository {
     async deleteCart(cid) {
         try {
             const result = await this.dao.deleteCart(cid);
-            console.log(result)
+            //console.log(result)
             return result;
         } catch (error) {
             throw error;
         }
     }
 
+    async deleteProductCart (idCart, idProduct) {
+        try {
+            const result = await this.dao.deleteProductCart(idCart, idProduct);
+        } catch (error) {
+            
+        }
+    }
 
 }

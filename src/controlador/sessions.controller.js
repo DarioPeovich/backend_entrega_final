@@ -37,7 +37,7 @@ class SessionsController{
             email:req.user.email,
             role: req.user.role
         }
-        res.send({status:"success", payload:req.user})
+        res.send({status:"success", payload: req.session.user})
     }
 
     static sessionsFailLogin = (req,res)=>{
