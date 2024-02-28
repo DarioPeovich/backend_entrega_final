@@ -19,7 +19,7 @@ form.addEventListener('submit', e => {
         }
     }).then(result => result.json()).then(json => {
         // Verificar si la respuesta indica éxito
-        console.log("Llegue");
+        
         if (json.status === "success"  && json.ticketCreated) {
 
            // Mostrar SweetAlert de éxito
@@ -43,7 +43,7 @@ form.addEventListener('submit', e => {
             console.error("Registration failed:", json.error);
             Swal.fire({
                 title: "Error!",
-                text: "Compra fallida. Por favor vuelva a intentarlo.",
+                text: "Compra fallida:" + json.error,
                 icon: "error",
             });
         }

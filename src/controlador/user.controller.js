@@ -23,6 +23,7 @@ class UserController {
     static getEmailUser = async (email) => {
         // const user = await userDao.getEmailUser(email);
         const user = await userService.getEmailUser(email);
+        console.log("En userController", "user:", user)
         return user;
     }
 

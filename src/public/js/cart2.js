@@ -43,7 +43,7 @@ form.addEventListener('submit', e => {
             console.error("Ticket failed:", json.error);
             Swal.fire({
                 title: "Error!",
-                text: "Generacion del ticket fallido!",
+                text: "Generacion del ticket fallido!. " + json.error,
                 icon: "error",
             });
         }

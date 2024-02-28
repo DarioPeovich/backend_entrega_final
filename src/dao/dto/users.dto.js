@@ -1,10 +1,10 @@
-export class GetsContactDto{
-    constructor(contact){
-        this.fullName = `${contact.firts_name} ${contact.last_name}`;
-        this.name = contact.firts_name;
-        this.lastName = contact.last_name;
-        this.telefono = contact.telefono;
-        this.email = contact.email;
+export class GetsUserDto{
+    constructor(user){
+        this.fullName = `${user.first_name} ${user.last_name}`;
+        this.name = user.first_name;
+        this.lastName = user.last_name;
+        this.email = user.email;
+        this.role = user.role
         // this.password = contact.password;
     }
 }

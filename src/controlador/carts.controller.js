@@ -229,9 +229,9 @@ class CartsController{
                 console.log("rejectedProducts",rejectedProducts);
                 
                 const totalTicket = await CartsController.totalTicket(ticketProducts);
-                console.log("ticketProducts",ticketProducts);
+                //console.log("ticketProducts",ticketProducts);
                 if (totalTicket == 0) {
-                  res.send({status:"error", error:"Todas las quantity de los productos, están por encima de su respectivos Stock "});
+                  return res.send({status:"error", error:"Todas las quantity de los productos, están por encima de su respectivos Stock "});
                 }
                 // console.log("req.user.email", req.user.email )
                 
@@ -247,10 +247,10 @@ class CartsController{
                 const resultCartAct = await CartsController.actualizarCart(cartId, ticketProducts, rejectedProducts);   //Se borra los productos que se incluyeron  en el Ticket
                 res.send({status:"success", ticketCreated, rejectedProducts})
             } else {
-                res.send({status:"error", error:"el carrito no existe"})
+                return res.send({status:"error", error:"el carrito no existe"})
             }
         } catch (error) {
-            res.send(error.message)
+            return res.send(error.message)
         }
     }
     

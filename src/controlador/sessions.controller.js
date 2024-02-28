@@ -1,3 +1,4 @@
+import { userService } from "../dao/repository/index.js";
 
 class SessionsController{ 
 
@@ -11,7 +12,8 @@ class SessionsController{
     }
 
     static sessionsCurrent = async (req,res)=>{
-        const user = req.session.user;
+
+        const user = await userService.getEmailUser(req.session.user.email)
         
         if (!user) {
             res.send({
