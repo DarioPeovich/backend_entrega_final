@@ -10,7 +10,7 @@ form.addEventListener('submit', e => {
     //const linkPurchase = `/api/carts/${cartId}/purchase`;
     const linkPurchase = "/api/carts/" + cartIdValue + "/purchase";
     //const linkPurchase = "/carts/" + cartId.value ;
-    // console.log(linkPurchase);
+    //  console.log(linkPurchase);
 
     fetch(linkPurchase, {
         method: "POST",
@@ -19,7 +19,7 @@ form.addEventListener('submit', e => {
         }
     }).then(result => result.json()).then(json => {
         // Verificar si la respuesta indica éxito
-        console.log("Llegue");
+        //console.log("Llegue");
         if (json.status === "success"  && json.ticketCreated) {
 
             // Mostrar SweetAlert de éxito
@@ -40,10 +40,10 @@ form.addEventListener('submit', e => {
             // window.location.href = "/success-page";
         } else {
             // Si hay errores, puedes manejarlos aquí o simplemente mostrar una alerta
-            console.error("Registration failed:", json.error);
+            console.error("Ticket failed:", json.error);
             Swal.fire({
                 title: "Error!",
-                text: "Registracion fallido. Por favor vuelva a intentarlo.",
+                text: "Generacion del ticket fallido!",
                 icon: "error",
             });
         }

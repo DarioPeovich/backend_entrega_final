@@ -20,7 +20,7 @@ class ViewsController{
             res.render('cart2',  {cart}  );
   
           } catch {
-          console.log("Erroor en lectura de archivos!!");
+          console.log("Error en lectura de archivos!!");
         }
       
       }

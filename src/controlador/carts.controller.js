@@ -197,13 +197,14 @@ class CartsController{
       }
       //--purchase
       static purchase = async (req,res) => {
+        console.log("Entre en purchase")
         try {
             const cartId = req.params.cid;
             const cart = await cartService.getIdCart(cartId);
             //console.log("Entre a carts.controllers.js => purchase", cartId)
             if(cart){
                 if(!cart.products.length){
-                    return res.send("es necesario que agrege productos antes de realizar la compra")
+                    return res.send({status:"error", error:"es necesario que agrege productos antes de realizar la compra"})
                 }
                 const ticketProducts = [];
                 const rejectedProducts = [];
@@ -223,13 +224,16 @@ class CartsController{
                         rejectedProducts.push(cartProduct);
                     }
                 }
-
+                
                 console.log("ticketProducts",ticketProducts);
                 console.log("rejectedProducts",rejectedProducts);
                 
                 const totalTicket = await CartsController.totalTicket(ticketProducts);
-                
-                //console.log("req.user.email", req.user.email )
+                console.log("ticketProducts",ticketProducts);
+                if (totalTicket == 0) {
+                  res.send({status:"error", error:"Todas las quantity de los productos, están por encima de su respectivos Stock "});
+                }
+                // console.log("req.user.email", req.user.email )
                 
                 const newTicket = {
                     code:uuidv4(),
@@ -243,7 +247,7 @@ class CartsController{
                 const resultCartAct = await CartsController.actualizarCart(cartId, ticketProducts, rejectedProducts);   //Se borra los productos que se incluyeron  en el Ticket
                 res.send({status:"success", ticketCreated, rejectedProducts})
             } else {
-                res.send("el carrito no existe")
+                res.send({status:"error", error:"el carrito no existe"})
             }
         } catch (error) {
             res.send(error.message)

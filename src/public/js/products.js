@@ -1,3 +1,7 @@
+// *---------------------------
+// NO SE UserActivation, SE HIZO PARA PRUEBAS. 28/02/24
+// *----------------------------------
+
 const form = document.getElementById('purchaseForm');
 const cartId = document.querySelector('input[name="cart_id"]');
 
