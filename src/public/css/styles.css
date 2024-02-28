@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    height: 10vh; /* Altura del viewport */
+    border: 2px solid black; /* Borde sólido de 2px de ancho */
+    margin: 2px 0; /* Espaciado vertical arriba y abajo de 2px */
+  }
+  
+  .content {
+    padding: 20px; /* Añadir relleno al contenido */
+  }
+  

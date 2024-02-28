@@ -226,12 +226,16 @@ class CartsController{
 
                 console.log("ticketProducts",ticketProducts);
                 console.log("rejectedProducts",rejectedProducts);
+                
                 const totalTicket = await CartsController.totalTicket(ticketProducts);
+                
+                //console.log("req.user.email", req.user.email )
+                
                 const newTicket = {
                     code:uuidv4(),
                     purchase_datetime: new Date(),   //.toLocaleString(),
                     amount:totalTicket,
-                    purchaser:req.user.email   
+                    purchaser: req.user.email   
                 }
                 const ticketCreated = await ticketsModel.create(newTicket);
                 //console.log("carts.controllers.js => purchase", ticketCreated);

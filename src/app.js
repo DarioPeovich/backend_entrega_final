@@ -24,6 +24,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+
 const httpServer = app.listen(PORT, ()=>{console.log(`Servidor funcionando en el puerto: ${PORT}`);})
 
 //Configurando handlebars
@@ -33,6 +34,7 @@ app.set("views", __dirname + "/views");
 
 
 app.use(express.static(__dirname + "/public"));
+
 
 //Configurando Mono Atlas
 //const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";

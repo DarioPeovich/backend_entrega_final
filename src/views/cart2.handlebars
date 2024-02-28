@@ -2,12 +2,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Carrito de Compras</title>
-    <link rel="stylesheet" href="/styles.css" />
+    {{!-- <link rel="stylesheet" href="/styles.css" /> --}}
   </head>
   <body>
     <h1>Carrito de Compras</h1>
 
-      {{!-- <p id="cartId" value={{cart_id}}>Identificador del carrito: {{cart._id}}</p> --}}
       <p id="cartId" data-cart-id="{{cart._id}}">Identificador del carrito: {{cart._id}}</p>
 
       
@@ -26,13 +25,15 @@
     </form> --}}
     <div>
         <form id="purchaseForm" >
-            {{!-- <label>Cart Id.</label> --}}
-            {{!-- <input name="cart_id"> --}}
-            <button type="submit">Terminar Compra</button>
-            {{!-- (Ingresar id. del carrito a cerrar la Compra) --}}
+            <button type="submit">Terminarr Compra</button>
+            (Ingresar id. del carrito a cerrar la Compra)
         </form>
-
     </div>
+
+    <div id="ticketInfo">
+      <!-- Aquí se mostrará la información del ticket -->
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/cart2.js"></script>
   </body>
 </html>

@@ -5,7 +5,12 @@ import { productsDao } from "../../index.js";
 class CartManagerDB {
   getCarts = async () => {
     try {
-      const carts = await cartsModel.find();
+      const carts = await cartsModel.find()
+      .lean()
+      .populate({
+         path: 'products.product',
+        model: productsModel
+     });
       return carts;
     } catch (error) {
       console.error("Error fetching carts:", error);
@@ -19,7 +24,7 @@ class CartManagerDB {
       //Si no tiene lean NO ANDA HANDLEBARS, EL PROFESOR LO DIJO EN CLASES Y YO NO LO HICE. RENEGUE DOS DIAS COMPLETOS
        //const cart = await cartsModel.findById(idCart).lean();
        const cart = await cartsModel.findById(idCart)
-          .lean()
+        .lean()
         .populate({
            path: 'products.product',
           model: productsModel

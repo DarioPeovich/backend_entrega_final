@@ -2,6 +2,7 @@
 const form = document.getElementById('purchaseForm');
 const cartIdElement = document.getElementById('cartId');
 const cartIdValue = cartIdElement.getAttribute('data-cart-id');
+const ticketInfoElement = document.getElementById('ticketInfo');
 // console.log("cartIdValue", cartIdValue)
 form.addEventListener('submit', e => {
     e.preventDefault();
@@ -16,18 +17,25 @@ form.addEventListener('submit', e => {
         headers: {
             "Content-Type": "application/json"
         }
-    })
-    .then(result => result.json())
-    .then(json => {
+    }).then(result => result.json()).then(json => {
         // Verificar si la respuesta indica éxito
-        if (json.status === "success") {
+        console.log("Llegue");
+        if (json.status === "success"  && json.ticketCreated) {
+
             // Mostrar SweetAlert de éxito
             Swal.fire({
                 title: "Success!",
-                text: "Registro exitoso.",
+                text: "Registro del Ticket exitoso.",
                 icon: "success",
             });
-
+            // Mostrar la información del ticket en el elemento HTML
+            const ticketCreated = json.ticketCreated;
+            ticketInfoElement.innerHTML = `
+                <p>Código de ticket: ${ticketCreated.code}</p>
+                <p>Fecha de compra: ${ticketCreated.purchase_datetime}</p>
+                <p>Monto total: ${ticketCreated.amount}</p>
+                // <p>Comprador: ${ticketCreated.purchaser}</p>
+            `;
             // Puedes redirigir a otra página si es necesario
             // window.location.href = "/success-page";
         } else {
