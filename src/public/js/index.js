@@ -48,3 +48,11 @@ socket.on("new-user",(username)=>{
         position:"top-end"
     })
 })
+
+socket.on("userNoAutorizado",(username)=>{
+    Swal.fire({
+        title: `${username}: Su rol no está definido, o no esta autorizado para chatear. Debe loguearse y no ser Admin.`,
+        toast: true,
+        position:"top-end"
+    })
+})

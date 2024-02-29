@@ -15,6 +15,8 @@ import __dirname from "./utils.js";
 //import viewsChatRouter from "./routes/views.chat.router.js"; //to do
 import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
+import { checkRole } from './middleware/auth.js';
+
 
 const PORT = config.server.port;     //8080;
 let messages = [];
@@ -69,22 +71,23 @@ app.use("/", viewsRouter);
 //Configuracion websocket
 const io = new Server(httpServer);
 
-io.on("connection", (socket)=>{
+io.on("connection", (socket) => {
     
-    socket.on("chat-message", async  (data)=>{
-        messages.push(data);
-        const message = {
-            user: data.username,
-            message: data.message
-        }
+    socket.on("chat-message", async (data) => {
 
-        const result = await messagesModel.create(message);     //Se almacena el mensaje
-        //let chats = await messagesModel.find();   //Si uso está funcion, trae todos los mensajes de chat antiguos
-        io.emit("messages", messages);
-    })
+      messages.push(data);
+      const message = {
+        user: data.username,
+        message: data.message,
+      };
 
-    socket.on("new-user", (username)=>{
-        socket.emit("messages",messages);
-        socket.broadcast.emit("new-user", username);
-    })
-})
+      const result = await messagesModel.create(message); //Se almacena el mensaje
+      //let chats = await messagesModel.find();   //Si uso está funcion, trae todos los mensajes de chat antiguos
+      io.emit("messages", messages);
+    });
+
+    socket.on("new-user", (username) => {
+      socket.emit("messages", messages);
+      socket.broadcast.emit("new-user", username);
+    });
+});

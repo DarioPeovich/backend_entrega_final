@@ -13,7 +13,8 @@ class SessionsController{
 
     static sessionsCurrent = async (req,res)=>{
 
-        const user = await userService.getEmailUser(req.session.user.email)
+        const user = req.session.user;
+   
         
         if (!user) {
             res.send({
@@ -21,6 +22,7 @@ class SessionsController{
                 msg: "No hay usuario activo"
             });
         }
+        user = await userService.getEmailUser(req.session.user.email)
         res.send({
             status: "succes",
             msg: "Usuario actual",
@@ -29,6 +31,7 @@ class SessionsController{
     }
 
     static sessionsLogin = async (req,res) =>{ 
+        //console.log("en sessions.controller");
         if(!req.user){
             return res.status(400).send({status:"error"})
         }
