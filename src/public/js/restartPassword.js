@@ -2,7 +2,7 @@ const form = document.getElementById("restartPasswordForm");
 
 form.addEventListener("submit", e =>{
     e.preventDefault();
-    const data = new FormData(form);
+      const data = new FormData(form);
     const obj = {}; 
     data.forEach((value,key)=>obj[key]=value);
     
@@ -14,7 +14,9 @@ form.addEventListener("submit", e =>{
         }
     }).then(result=>{
         if(result.status === 200){
-            console.log("Contraseña restaurada");
+            //console.log("Contraseña restaurada");
+            alert("Contraseña Restaurada")
+            window.location.replace('/login')
         }else{
             console.log("error");
             console.log(result);

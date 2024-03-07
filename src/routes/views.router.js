@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ViewsController } from "../controlador/views.controllers.js";
 
-//03/01/24: Este endPoint se paso a carts.routes.js y se cambia en app.js la ruta del Route
+
 const router = Router();
 
 //Rutas Carrito
@@ -17,13 +17,14 @@ router.get("/carts/:cid", ViewsController.getViewCartId);
 
   //Rutas Sessions
   const publicAccess = (req,res,next) =>{
-    if(req.session.user){
-        return res.redirect('/');
+    // console.log("en sessions.controller.js. publicAccess", req.user)
+    if(req.user){
+        //return res.redirect('/');
     }
     next();
 }
 const privateAccess = (req,res,next) =>{
-    if(!req.session.user){
+    if(!req.user){
         return res.redirect('/login');
     }
     next();
@@ -33,8 +34,8 @@ router.get('/register', publicAccess, ViewsController.sessionRegister);
 
 router.get('/login', publicAccess, ViewsController.sessionLogin
 )
-router.get('/',privateAccess, ViewsController.sessionProfile)
-
+router.get('/current', ViewsController.sessionProfile)   // current
+//current authToken, privateAccess  ==> de /current
 router.get("/resetPassword", ViewsController.sessionResetPassword)
 
 export { router as viewsRouter };

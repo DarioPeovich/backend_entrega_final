@@ -3,6 +3,12 @@ import { ProductsController } from "../controlador/products.controller.js";
 import { checkRole } from "../middleware/auth.js";
 import { generateProduct } from "../utils.js";
 
+//---borrar
+import { CustomError } from "../services/customError.service.js";
+import { EError } from "../enums/EError.js";
+import { generateUserErrorInfo } from "../services/productErrorInfo.js";
+
+//--Fin borrar
 const router = Router();
 
 
@@ -11,8 +17,8 @@ router.get("/", ProductsController.getProducts);
 
 router.get("/:pid", ProductsController.getProductId);
 
-router.post("/", checkRole(["ADMIN"]), ProductsController.createProduct);
-
+router.post("/", ProductsController.createProduct);
+// checkRole(["ADMIN"]),
 router.put("/:pid", checkRole(["ADMIN"]), ProductsController.modifProduct);
 
 //Para ingresar un array de Productos desde el body
@@ -31,5 +37,40 @@ router.get("/mock/mockingproducts/", (req,res)=>{
     res.json({status:"success", payload: products})
 
 })
+
+//router.post("/prueba/pruebaerror", ProductsController.pruebaError);
+
+router.post("/prueba/pruebaerror", async (req, res, next) => {
+    // try {
+        // const error = new Error("mensajeDeError");
+        const error = Error("¡Fui creado usando una llamada a función!");
+        throw error;
+        // CustomError.createError({
+        //   name:"Product create error",
+        //   cause: generateUserErrorInfo(req.body),
+        //   message:"Error creando el Producto",
+        //   errorCode:EError.INVALID_PARAM          
+        // });
+        //------------------
+        // const mensajeDeError = "Este es un mensaje de error.";
+        // console.log("Mensaje de error:", mensajeDeError); // Verificar que el mensaje se asigna correctamente
+        // console.trace();
+        // const error = new Error(mensajeDeError);
+        // throw error;      
+        //--------------------------
+    // } catch (error) {
+    //     console.log("Error en try/cath", error)
+    //     //throw error;
+    //     next(error); // Llamar a next con el error para que Express lo maneje
+    // }
+
+    // CustomError.createError({
+    //   name:"Product create error",
+    //   cause: generateUserErrorInfo(req.body),
+    //   message:"Error creando el Producto",
+    //   errorCode:EError.INVALID_PARAM          
+      
+    // })
+});
 
 export { router as productRouter };

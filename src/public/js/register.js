@@ -18,14 +18,16 @@ form.addEventListener('submit', e => {
         // Verificar si la respuesta indica éxito
         if (json.status === "success") {
             // Mostrar SweetAlert de éxito
+            console.log("En register.js: json.token", json.token)
+            localStorage.setItem("token", json.token)
             Swal.fire({
                 title: "Success!",
                 text: "Registro exitoso.",
                 icon: "success",
             });
+            
+            window.location.replace("http://localhost:8080/")
 
-            // Puedes redirigir a otra página si es necesario
-            // window.location.href = "/success-page";
         } else {
             // Si hay errores, puedes manejarlos aquí o simplemente mostrar una alerta
             console.error("Registration failed:", json.error);

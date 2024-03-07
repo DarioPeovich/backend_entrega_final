@@ -1,9 +1,17 @@
 import { userService } from "../dao/repository/index.js";
+import userModel from "../dao/models/users.model.js";
+import { generateToken, authToken } from "../utils.js";
+import { createHash } from "../utils.js";
 
 class SessionsController{ 
 
     static sessionsRegister = async (req,res) => {
-        res.send({status:"success", message:"User registrado"})
+        // El usuario ha sido registrado con éxito, ahora puedes generar el token JWT
+        const token = generateToken(req.user);
+
+        // Devuelve el token JWT al cliente
+        res.json({ token });
+        //res.send({status:"success", message:"User registrado"})
     }
 
     static sessionsFailRegister = async (req,res)=>{
@@ -11,39 +19,32 @@ class SessionsController{
         res.send({error: 'fallo en el registro'})
     }
 
-    static sessionsCurrent = async (req,res)=>{
-
-        const user = req.session.user;
-   
-        
-        if (!user) {
-            res.send({
-                status: "error",
-                msg: "No hay usuario activo"
-            });
-        }
-        user = await userService.getEmailUser(req.session.user.email)
-        res.send({
-            status: "succes",
-            msg: "Usuario actual",
-            user
-          });
+   static sessionsCurrent = async (req, res) => {
+    let user = req.user;
+    if (!user) {
+      res.send({
+        status: "error",
+        msg: "No hay usuario activo",
+      });
     }
+    
+    user = await userService.getEmailUser(req.user.email)
+    res.send({ status: "success", payload: user });
+   }
+
 
     static sessionsLogin = async (req,res) =>{ 
         //console.log("en sessions.controller");
         if(!req.user){
             return res.status(400).send({status:"error"})
         }
-        req.session.user ={
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
-            age:req.user.age,
-            email:req.user.email,
-            role: req.user.role
-        }
-        res.send({status:"success", payload: req.session.user})
+        //console.log("En sessions.controller.js req.user: ", req.user);
+        const token = generateToken(req.user);
+        //console.log("En sessions.controller.js token: ", token);
+        
+        res.send({status:"success", token})
     }
+
 
     static sessionsFailLogin = (req,res)=>{
         res.send({error:"fail login"})
@@ -70,6 +71,7 @@ class SessionsController{
             })
         )
         const user = await userModel.findOne({email});
+        
         if(!user) return res.status(400).send(
             res.send({
                 status:"error",

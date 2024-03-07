@@ -79,7 +79,8 @@ class ViewsController{
     }
 
     static sessionProfile = (req,res)=>{
-        res.render('profile', {user:req.session.user})
+       // res.render('profile', {user:req.user})
+       res.render('profile')
     }
 
     static sessionResetPassword = (req,res)=>{

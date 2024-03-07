@@ -3,17 +3,32 @@ import userModel from '../dao/models/users.model.js'
 import {createHash, validatePassword} from "../utils.js"
 import passport from "passport";
 import {SessionsController} from "../controlador/sessions.controller.js"
+import { authToken } from "../utils.js";
+
 
 const router = Router();
-
+const publicAccess = (req,res,next) =>{
+    if(req.user){
+        return res.redirect('/');
+    }
+    next();
+}
+const privateAccess = (req,res,next) =>{
+    if(!req.user){
+        return res.redirect('/login');
+    }
+    next();
+}
 
 router.post("/register",passport.authenticate("register", {failureRedirect:"/api/sessions/failregister"}), SessionsController.sessionsRegister)
 
 router.get("/failregister", SessionsController.sessionsFailRegister)
 
-router.get("/current", SessionsController.sessionsCurrent)
 
-router.post("/login", passport.authenticate("login", {failureRedirect:'/api/session/faillogin'}), SessionsController.sessionsLogin)
+router.get("/current", authToken, SessionsController.sessionsCurrent)
+
+router.post("/login", passport.authenticate("login", {failureRedirect:'/api/sessions/faillogin'}), SessionsController.sessionsLogin)
+
 
 router.get("/faillogin", SessionsController.sessionsFailLogin)
 

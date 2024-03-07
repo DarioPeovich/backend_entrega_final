@@ -15,7 +15,8 @@ import __dirname from "./utils.js";
 //import viewsChatRouter from "./routes/views.chat.router.js"; //to do
 import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
-import { checkRole } from './middleware/auth.js';
+import { errorHandler } from './middleware/errorHandler.js';
+
 
 
 const PORT = config.server.port;     //8080;
@@ -25,9 +26,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+//midlleware
 
 
-const httpServer = app.listen(PORT, ()=>{console.log(`Servidor funcionando en el puerto: ${PORT}`);})
+
 
 //Configurando handlebars
 app.engine("handlebars", engine());
@@ -43,6 +45,7 @@ app.use(express.static(__dirname + "/public"));
 //const connection = mongoose.connect(MONGO);  //pasado a dbConnections.js 09/02/24
 
 const MONGO =  config.mongo.url;
+                       // sino, no atrapa los errores. (Me perdi un dia xq lo habia ubicado al principio, antes de los routers lpm)
 
 app.use(session({
     store: new MongoStore({
@@ -60,6 +63,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+
 //Rutas
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
@@ -68,8 +72,11 @@ app.use('/api/sessions', sessionRouter);
 //Rutas views
 app.use("/", viewsRouter);
 
+const httpServer = app.listen(PORT, ()=>{console.log(`Servidor funcionando en el puerto: ${PORT}`);})
+
 //Configuracion websocket
 const io = new Server(httpServer);
+
 
 io.on("connection", (socket) => {
     
@@ -91,3 +98,7 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("new-user", username);
     });
 });
+
+app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
+
+   

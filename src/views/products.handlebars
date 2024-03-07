@@ -9,7 +9,8 @@
       <p> Bienvenido, {{user.full_name}}</p>
       <p>{{user.email}}</p>
       <p>{{user.rol}}</p>
-      <a href="/api/sessions/logout"><button>Salir</button></a>
+      {{!-- <a href="/api/sessions/logout"><button>Salir</button></a> --}}
+      <a id="btn_salir" onclick="logout()"><button>Salir</button></a>
     </div>
 
     {{!-- Inicio No se usa. Para pruebas --}}
@@ -55,6 +56,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/logout.js"></script>
     {{!-- <script src="/js/products.js"></script> --}}
   </body>
 </html>

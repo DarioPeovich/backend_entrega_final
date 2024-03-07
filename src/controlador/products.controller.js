@@ -2,6 +2,10 @@
 //import { productsDao } from "../dao/index.js";  //21/02/24
 import { productsService } from "../dao/repository/index.js";
 
+import { CustomError } from "../services/customError.service.js";
+import { EError } from "../enums/EError.js";
+import { generateUserErrorInfo } from "../services/productErrorInfo.js";
+
 //const productMangerDB = new ProductManagerDB();   //Cambiado por productsDao 10/02/24
 
 class ProductsController{
@@ -78,7 +82,13 @@ class ProductsController{
         !stock ||
         !category
       ) {
-        return res.status(400).send({ error: "Datos incompletos" });
+        CustomError.createError({
+          name:"Product create error",
+          cause: generateUserErrorInfo(req.body),
+          message:"Error creando el Producto",
+          errorCode:EError.INVALID_PARAM          
+        })
+        //return res.status(400).send({ error: "Datos incompletos" });
       }
     
       const product = {
@@ -188,7 +198,18 @@ class ProductsController{
         console.log("Error en lectura de archivos!!");
       }
     }
+  //--borrar es para prueba
+  static pruebaError = async (req, res) => {
+    CustomError.createError({
+      name:"Product create error",
+      cause: generateUserErrorInfo(req.body),
+      message:"Error creando el Producto",
+      errorCode:EError.INVALID_PARAM          
+      
+    })
+  }
 
 }
+
 
 export {ProductsController}
