@@ -2,7 +2,7 @@ import winston from "winston";
 import path from "path";
 import dotenv from "dotenv";
 
-import { __dirname } from "../utils.js";
+import  __dirname from "../utils.js";
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ const customLevels ={
 const devLogger = winston.createLogger({
     levels:customLevels.levels,
     transports:[
-        new winston.transports.Console({level:"debug"})
+        new winston.transports.Console({level:"error"})     //debug
     ]
 });
 
@@ -44,6 +44,7 @@ const prodLogger = winston.createLogger({
 const currentEnv = process.env.NODE_ENV || "development";
 
 export const addLogger = (req,res,next) =>{
+
     if(currentEnv === "development"){
         req.logger = devLogger;
         console.log("DEV");
@@ -51,6 +52,6 @@ export const addLogger = (req,res,next) =>{
         req.logger = prodLogger;
         console.log("PROD");
     }
-    req.logger.info(`${req.url} - method: ${req.method} `)
+    //req.logger.info(`${req.url} - method: ${req.method} `)
     next()
 }
