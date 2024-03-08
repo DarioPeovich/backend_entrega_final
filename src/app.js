@@ -16,7 +16,7 @@ import __dirname from "./utils.js";
 import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
 import { errorHandler } from './middleware/errorHandler.js';
-
+import { addLogger } from "./utils/logger.js";
 
 
 const PORT = config.server.port;     //8080;
@@ -68,6 +68,7 @@ app.use(passport.session());
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use('/api/sessions', sessionRouter);
+app.use('/api/loggerTest', loggerTestRouter);
 
 //Rutas views
 app.use("/", viewsRouter);
@@ -99,6 +100,7 @@ io.on("connection", (socket) => {
     });
 });
 
+//middleware`s
 app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
-
+app.use(addLogger);   //Este es un middleWare para manejo de errores
    
