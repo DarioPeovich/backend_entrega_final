@@ -34,6 +34,7 @@ router.get("/faillogin", SessionsController.sessionsFailLogin)
 
 router.get('/logout', SessionsController.sessionsLogout)
 
+router.post("/forgotPassword", SessionsController.forgotpassword);
 
 router.post("/restartPassword", SessionsController.sessionsRestartPassword)
 

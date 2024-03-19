@@ -3,6 +3,7 @@ import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
 import { viewsRouter } from './routes/views.router.js';
 import { loggerTestRouter } from './routes/loggerTestRouter.js';
+import { userRouter } from './routes/userRouter.js';
 import session from "express-session";
 import sessionRouter from './routes/sessions.routes.js'
 import passport from 'passport';
@@ -62,13 +63,15 @@ inicializePassport()
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(addLogger);   //Este es un middleWare para manejo de errores. debe ir antes de las rutas!!
+console.log("En app.js habilitar addLogger middleWare")
+//app.use(addLogger);   //Este es un middleWare para manejo de errores. debe ir antes de las rutas!!
 
 //Rutas
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/loggerTest', loggerTestRouter);
+app.use('/api/users', userRouter);
 
 //Rutas views
 app.use("/", viewsRouter);

@@ -11,6 +11,7 @@ const producSchema = new mongoose.Schema({
     status: Boolean,
     stock: Number,
     category: String,
+    owner: String,
     thumbnails:{
         type: Array,
         default: []

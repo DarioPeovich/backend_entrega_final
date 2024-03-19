@@ -29,6 +29,11 @@ export const config = {
     server: {
         port: PORT
     },
+    gmail:{
+        emailToken:process.env.SECRET_TOKEN_EMAIL,
+        emailAdmin:process.env.EMAIL_ADMIN,
+        emailPass:process.env.EMAIL_PASSWORD
+    },
     mongo:{
         url: MONGO_URL
     },

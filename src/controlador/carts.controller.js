@@ -132,12 +132,22 @@ class CartsController{
         const pid = req.params.pid;
         const quantity = req.body.quantity;
           try {
-              //const result = await cartManagerDB.updateCart(cid, pid, quantity);  //Cambiado x cartsDao  10/02/24
-              // const result = await cartsDao.updateCart(cid, pid, quantity);
+              //Se valida que un un usuario poremium no pueda agregar a su carrito un producto que le pertenece
+              const product = await productsService.getProductById(pid);
+              if (req.user.role = "PREMIUM") {
+                  if (product.owner === req.user.email) {
+                      return res.status(403).send({
+                        status: "error",
+                        msg: `Ruta POST CART - Agrego producto al carrito. CID: ${cid} - PID: ${pid}. No se puede agregar un producto propio`,
+                      });
+                   }
+      
+                  }
+
               const result = await cartService.updateCart(cid, pid, quantity);
 
               //console.log(result);
-              res.send({
+              res.status(200).send({
                   status: "succes",
                   msg: `Ruta POST CART - Agrego producto al carrito. CID: ${cid} - PID: ${pid}`,
                   result,

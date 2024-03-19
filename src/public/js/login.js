@@ -15,12 +15,13 @@ form.addEventListener("submit", e => {
         }
     }).then(response => {
         // Verifica si la respuesta fue exitosa (código de estado 200)
-        if (response.ok) {
+        if (response.status === 200) {
             // Extrae el cuerpo de la respuesta como JSON
             return response.json();
         } else {
             // Si la respuesta no es exitosa, lanza un error
-            throw new Error('Failed to login');
+            //throw new Error('Failed to login');
+            alert("Error en usuario o contraseña")
         }
     }).then(data => {
         // Accede al token desde el cuerpo de la respuesta JSON

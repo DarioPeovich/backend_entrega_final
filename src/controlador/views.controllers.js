@@ -87,6 +87,10 @@ class ViewsController{
         res.render("resetPassword");
       }
     
+      static sessionForgotPassword = (req,res)=>{
+        
+        res.render("forgotPassword");
+      }
 }
 
 export {ViewsController};

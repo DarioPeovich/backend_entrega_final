@@ -33,6 +33,14 @@ class UserController {
         
         return result;
     }
+
+    static changeRole = async (user) => {
+        // const user = await userDao.createUser(user);
+        const uid = req.params.uid;
+        const result = await userService.createUser(user);
+        
+        return result;
+    }
 }
 
 export {UserController};

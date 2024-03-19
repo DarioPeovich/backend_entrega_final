@@ -3,7 +3,8 @@ import { dirname } from "path";
 import bcrypt from "bcrypt";
 import { Faker, en } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
-
+import { config } from "./config/config.js";
+import { error } from "console";
 /*** */
 export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const validatePassword = (password, user) => bcrypt.compareSync(password, user.password);
@@ -59,3 +60,23 @@ export const authToken = (req,res,next) => {
     })
 }
 //--JWT FIN
+
+//Generacion de token con JWT para mail
+export const generateEmailToken = (email,expireTime)=>{
+    //const token = jwt.sign({email},config.gmail.emailToken,{expiresIn:810}); //expireTime
+    const token = jwt.sign({email},config.gmail.emailToken,{expiresIn:expireTime}); //
+    console.log("En generateEmailToken. Token duracion link:", token)
+    return token;
+};
+
+export const verifyEmailToken = (token)=>{
+    //console.log("En verifyEmailToken. Token duracion link:", token)
+    try {
+        const info = jwt.verify(token,config.gmail.emailToken);
+        return info.email;
+    } catch (error) {
+        console.log("error catch", error.message);
+        return null;
+    }
+};
+//Fin de token para mail

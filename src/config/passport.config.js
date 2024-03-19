@@ -36,8 +36,8 @@ const inicializePassport = () => {
         try {
             
             // let user = await userModel.findOne({email:username});
-            let user = await userDao.getEmailUser({username});
-            
+            //let user = await userDao.getEmailUser({username});
+            let user = await userDao.getEmailUser(username);
             if(user){
                 console.log('Usuario ya registrado');
                 return done(null,false)
@@ -68,7 +68,7 @@ const inicializePassport = () => {
     passport.use("login", new LocalStrategy(
       {usernameField:"email"},
       async (username, password, done)=>{
-        //   console.log("en passport.login", username + " // " + password)
+          //console.log("en passport.login", username + " // " + password)
           try {
               //1ra. linea es el original que anda 21/02/24
               const user = await userModel.findOne({email:username})
@@ -82,7 +82,9 @@ const inicializePassport = () => {
               if(!user){
                   return done(null, false);
               }
+              
               if(!validatePassword(password, user)){
+                    //console.log("password erroneo")
                   return done(null, false);
               } 
               return done(null,user)

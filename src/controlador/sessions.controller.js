@@ -1,7 +1,10 @@
 import { userService } from "../dao/repository/index.js";
 import userModel from "../dao/models/users.model.js";
-import { generateToken, authToken } from "../utils.js";
+import { generateToken, authToken } from "../utils.js";     //Para Session
 import { createHash } from "../utils.js";
+import { generateEmailToken, verifyEmailToken, validatePassword} from "../utils.js";    //Para token envio de eMail
+import { sendRecoveryPass } from "../utils/email.js"; 
+
 
 class SessionsController{ 
 
@@ -34,7 +37,7 @@ class SessionsController{
 
 
     static sessionsLogin = async (req,res) =>{ 
-        //console.log("en sessions.controller");
+        //console.log("en sessionsLogin de sessions.controller.js");
         if(!req.user){
             return res.status(400).send({status:"error"})
         }
@@ -42,12 +45,13 @@ class SessionsController{
         const token = generateToken(req.user);
         //console.log("En sessions.controller.js token: ", token);
         
-        res.send({status:"success", token})
+        res.status(200).send({status:"success", token})
     }
 
 
     static sessionsFailLogin = (req,res)=>{
-        res.send({error:"fail login"})
+        //console.log("Pase x sessionsFailLogin, en sessions.controller.js")
+        return res.status(400).send({error:"fail login"})
     }
 
     static sessionsLogout = (req,res)=>{
@@ -62,34 +66,73 @@ class SessionsController{
         })
     }
 
+    static forgotpassword = async (req,res)=>{
+        try {
+            const {email} = req.body;
+            const user = await userModel.findOne({email});
+            
+            if(!user){
+                res.send(`<div>Error no existe el usuario, vuelva a intentar: <a href="/forgot-password">Intente de nuevo</a></div>`)
+            }
+            
+            const token = generateEmailToken(email, 3600);
+            //console.log('object');
+            await sendRecoveryPass(email, token);
+            res.send("Se envio el correo de recuperacion.")
+    
+        } catch (error) {
+            
+            res.send(`<div>Error,<a href="/forgot-password">Intente de nuevo</a></div>`)
+        }
+    
+    }
+
     static sessionsRestartPassword = async (req,res)=>{
-        const {email,password} = req.body;
-        if(!email || !password) return res.status(400).send(
-            res.send({
-                status:"error",
-                message:"Datos incorrectos"
-            })
-        )
+
+        //const token = req.query.token;
+        
+        const {email,newPassword, token} = req.body;
+
+        const validToken = await verifyEmailToken(token);
+        //console.log("En controller sessionsRestartPassword, validToken: ", validToken)
+        if(!validToken || validToken == null){
+            //console.log("token no valido")
+            return res.status(401).send({status:"error",
+            message: `El token ya no es valido. Intente la resaturacion nuevamente!`});
+        }
+
+        if (!email || !newPassword) {
+            //console.log("falta email o PassWord")
+            return res.status(400).send({
+                status: "error",
+                message: "Datos incorrectos. Falta eMail o passWord"
+            });
+        }
+        
+        
         const user = await userModel.findOne({email});
         
-        if(!user) return res.status(400).send(
-            res.send({
-                status:"error",
-                message:"No existe el usuario"
-            })
-        )
-        const newHashPassword = createHash(password);
+        if (!user) {
+            //console.log("Usuario no hallado")
+            return res.status(400).send({
+                status: "error",
+                message: "No existe el usuario"
+            });
+        }
+        
+        //Si la validacion del nuevo  passWord con el antigüo da Ok, quiere decir que se está utilizando el mismo passWord anterior
+        if(validatePassword(newPassword,user)){
+            return res.status(400).send({status: "error", message:"no se puede usar la misma contraseña"})
+        }
+        const newHashPassword = createHash(newPassword);
     
         await userModel.updateOne({_id:user._id},{$set:{password:newHashPassword}});
-        res.send({
+        res.status(200).send({
             status:"success",
             message:"contraseña restaurada"
         })
     }
-    
-
-
-
+ 
 }
 
 export {SessionsController};
