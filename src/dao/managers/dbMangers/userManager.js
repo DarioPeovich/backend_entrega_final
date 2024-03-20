@@ -31,6 +31,15 @@ class UserManagerDB {
         }
     }
 
+    updateUser = async (uid, user) => {
+        try {
+            const result = await userModel.updateOne({ _id: uid }, { $set: user });
+            return user
+        } catch (error) {
+            throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+        }
+    }
+
     createUser = async (user) => {
         try {
             const result = userModel.create(user);

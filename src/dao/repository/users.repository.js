@@ -8,10 +8,12 @@ export class UserRepository {
 
       getUsers = async () => {
         const users = await this.dao.getUsers();
-        usersDto = users.map( (user) => {
-         const usersDto = new GetsUserDto(user);
+        //return users;
+        const usersDto = users.map( (user) => {
+         const userDto = new GetsUserDto(user);
+         return userDto; }
+         )
          return usersDto;
-        })
      }
 
      getIdUser = async (id) => {
@@ -27,4 +29,14 @@ export class UserRepository {
       return userDto;
      }
      
+     updateUser = async (uid, user) => {
+      const updateUser = await this.dao.updateUser(uid, user);
+      return updateUser;
+     }
+
+     createUser = async (user) => {
+      const createdUser = await this.dao.createUser(user);
+      return createdUser;
+     }
+
 }
