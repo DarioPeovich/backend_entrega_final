@@ -7,7 +7,7 @@ class UserController {
             //userDao.getUsers
             //const users = await userDao.getUsers();
             const users = await userService.getUsers();
-            console.log("Users: ", users)
+            //console.log("Users: ", users)
             return res.status(200).send({status:"succes", users});
         } catch (error) {
             throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router

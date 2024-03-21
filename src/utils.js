@@ -65,7 +65,7 @@ export const authToken = (req,res,next) => {
 export const generateEmailToken = (email,expireTime)=>{
     //const token = jwt.sign({email},config.gmail.emailToken,{expiresIn:810}); //expireTime
     const token = jwt.sign({email},config.gmail.emailToken,{expiresIn:expireTime}); //
-    console.log("En generateEmailToken. Token duracion link:", token)
+    //console.log("En generateEmailToken. Token duracion link:", token)
     return token;
 };
 

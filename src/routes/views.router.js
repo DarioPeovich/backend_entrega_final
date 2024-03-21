@@ -14,6 +14,7 @@ router.get("/chat", ViewsController.getViewChat);
 
 router.get("/chat/list", ViewsController.getViewChatList);
 
+
 //Rutas Sessions
 const publicAccess = (req, res, next) => {
   // console.log("en sessions.controller.js. publicAccess", req.user)
@@ -29,6 +30,7 @@ const privateAccess = (req, res, next) => {
   next();
 };
 
+//Vistas de Sesion
 router.get("/register", publicAccess, ViewsController.sessionRegister);
 
 router.get("/login", publicAccess, ViewsController.sessionLogin);

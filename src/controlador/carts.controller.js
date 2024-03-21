@@ -132,7 +132,7 @@ class CartsController{
         const pid = req.params.pid;
         const quantity = req.body.quantity;
           try {
-              //Se valida que un un usuario poremium no pueda agregar a su carrito un producto que le pertenece
+              //Se valida que un un usuario premium no pueda agregar a su carrito un producto que le pertenece
               const product = await productsService.getProductById(pid);
               if (req.user.role = "PREMIUM") {
                   if (product.owner === req.user.email) {
