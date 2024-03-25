@@ -4,9 +4,11 @@ import { checkRole } from "../middleware/auth.js";
 
 const router = Router();
 
-router.get("/:cid", CartsController.getProductsCartId);
+router.get("/:cid/products", CartsController.getProductsCartId); //Obtener los productos de un Carrito
 
-router.get("/", CartsController.getCarts);
+router.get("/:cid/", CartsController.getCartId);    //Obtener un carrito
+
+router.get("/", CartsController.getCarts);  //Obtener todos los carritos
 
 
 //Se crea el Carrito, con array products vacio

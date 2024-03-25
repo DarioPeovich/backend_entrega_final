@@ -35,16 +35,18 @@ class UserController {
             first_name,
             last_name,
             email,
+            password,
             age,
             role
         } = req.body;
-        if (!first_name || !last_name || !email) {
+        if (!first_name || !last_name || !email || !password || !age) {
             return res.status(401).send({error:"Falta datos del Usuario, nombres o eMail"});
         }
         const user = {
             first_name,
             last_name,
             email,
+            password,
             age,
             role
         }
@@ -62,6 +64,7 @@ class UserController {
             age,
             role
         } = req.body;
+        //Para cambiar el passWord existe un endPoint completo que etá sessions
         if (!first_name || !last_name || !email) {
             return res.status(401).send({error:"Falta datos del Usuario, nombres o eMail"});
         }
@@ -97,7 +100,10 @@ class UserController {
                     break;
             }
         }
-        req.user.role = user.role;
+        if (req) {
+            req.user.role = user.role;  //Cambia en tiempo real el Rol del Usuario
+        }
+        
         const result = await userService.updateUser(uid, user);
         
         return res.status(200).send({status:"succes", result });

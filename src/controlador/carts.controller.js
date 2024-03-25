@@ -1,4 +1,5 @@
 // import { cartsDao } from "../dao/index.js"   //21/04/24
+import mongoose from "mongoose";
 import { cartService } from "../dao/repository/index.js";
 import { productsService } from "../dao/repository/index.js";
 import productsModel from "../dao/models/products.model.js";
@@ -6,7 +7,25 @@ import { v4 as uuidv4 } from "uuid";
 import { ticketsModel } from "../dao/models/ticket.model.js";
 
 class CartsController{ 
+  static getCartId = async (req, res) => {
 
+    const cid = req.params.cid;
+    try {
+      const cart = await cartService.getIdCart(cid);
+      res.status(200).send({
+        status: "succes",
+        msg: `Cart con id ${cid}`,
+        cart
+      })
+
+    } catch (error) {
+      res.status(500).send({
+        status: "error",
+        msg: `Error interno del servidor`,
+      })
+ 
+    }
+  }
     static getProductsCartId = async (req, res) => {
 
         const cid = req.params.cid;
@@ -43,18 +62,22 @@ class CartsController{
             //console.log("---productsAux---" + JSON.stringify(productsAux,null,'\t') );
             //console.log("Producto 0: " + productsAux[0].title)
              //Habilitar para la entrega
-            res.render("cartProducts", {productsAux} );
+            //res.render("cartProducts", {productsAux} ); 25/03/24: Se comento no debe haber un render aqui
         
-            //Comentar. es solo para pruebas
-        //   res.send({
-        //     status: "succes",
-        //     msg: `Ruta GET ID CART con ID: ${cid}`,
-        //     //cart,
-        //     productsAux
-        //   });
+            //Comentar. es solo para pruebas. 25/03/24 Se habilito x se comento el render
+          res.status(200).send({
+            status: "succes",
+            msg: `Ruta Productos de ID CART con ID: ${cid}`,
+            //cart,
+            productsAux
+          });
             //-------Fin solo para pruebas
         } catch (error){
           console.log("Error en lectura de archivos!!. Error:" + error);
+          res.status(500).send({
+            status: "error",
+            msg: `Error interno del servidor`,
+          })
         }
       
       }
@@ -207,11 +230,15 @@ class CartsController{
       }
       //--purchase
       static purchase = async (req,res) => {
-        console.log("Entre en purchase")
+        //console.log("Entre en purchase")
         try {
             const cartId = req.params.cid;
-            const cart = await cartService.getIdCart(cartId);
             //console.log("Entre a carts.controllers.js => purchase", cartId)
+            if (!mongoose.Types.ObjectId.isValid(cartId)) {
+              return res.send({status:"error", error:"Id. del carrito inválido"})
+            }
+            const cart = await cartService.getIdCart(cartId);
+            
             if(cart){
                 if(!cart.products.length){
                     return res.send({status:"error", error:"es necesario que agrege productos antes de realizar la compra"})
@@ -235,8 +262,8 @@ class CartsController{
                     }
                 }
                 
-                console.log("ticketProducts",ticketProducts);
-                console.log("rejectedProducts",rejectedProducts);
+                //console.log("ticketProducts",ticketProducts);
+                //console.log("rejectedProducts",rejectedProducts);
                 
                 const totalTicket = await CartsController.totalTicket(ticketProducts);
                 //console.log("ticketProducts",ticketProducts);

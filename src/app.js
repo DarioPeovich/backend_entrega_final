@@ -8,6 +8,8 @@ import session from "express-session";
 import sessionRouter from './routes/sessions.routes.js'
 import passport from 'passport';
 import { config } from './config/config.js';
+import { swaggerSpecs } from './config/docConfig.js';
+import swaggerUi from "swagger-ui-express";
 
 import mongoose from 'mongoose';
 import MongoStore from "connect-mongo";
@@ -75,6 +77,9 @@ app.use('/api/users', userRouter);
 
 //Rutas views
 app.use("/", viewsRouter);
+
+//Documentacion de end point 
+app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
 
 const httpServer = app.listen(PORT, ()=>{console.log(`Servidor funcionando en el puerto: ${PORT}`);})
 

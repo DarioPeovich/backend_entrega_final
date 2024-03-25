@@ -74,7 +74,7 @@ class ProductManagerDB {
     try {
  
       const product = await productsModel.findById(pid);
-      console.log(product);
+      //console.log(product);
       if ((product === null || product === undefined)) {
         throw new Error(`No se encontró ningún Producto con el ID: ${pid}`);  //se lanza una excepcion, para capturarla desde el Route
       }

@@ -216,16 +216,7 @@ class ProductsController {
       res.status(500).send({ error: "Se ha producido un error interno en el servidor" });
     }
   };
-
-  //--borrar es para prueba
-  static pruebaError = async (req, res) => {
-    CustomError.createError({
-      name: "Product create error",
-      cause: generateUserErrorInfo(req.body),
-      message: "Error creando el Producto",
-      errorCode: EError.INVALID_PARAM,
-    });
-  };
+ 
 }
 
 

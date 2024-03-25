@@ -124,6 +124,8 @@ class SessionsController{
         if(validatePassword(newPassword,user)){
             return res.status(400).send({status: "error", message:"no se puede usar la misma contraseña"})
         }
+
+        //Se hashea el password
         const newHashPassword = createHash(newPassword);
     
         await userModel.updateOne({_id:user._id},{$set:{password:newHashPassword}});
