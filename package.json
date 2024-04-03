@@ -77,6 +77,8 @@
     "side-channel": "^1.0.4",
     "socket.io": "^4.7.2",
     "statuses": "^2.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "toidentifier": "^1.0.1",
     "type-is": "^1.6.18",
     "unpipe": "^1.0.0",
@@ -86,9 +88,16 @@
     "winston": "^3.12.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "mocha test/supertest.test.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
+    "supertest": "^6.3.4"
+  }
 }

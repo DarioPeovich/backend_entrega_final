@@ -11,8 +11,8 @@ router.get("/", ProductsController.getProducts);
 
 router.get("/:pid", ProductsController.getProductId);
 
-router.post("/", checkRole(["ADMIN", "PREMIUM"]), ProductsController.createProduct);
-
+router.post("/",  checkRole(["ADMIN", "PREMIUM"]), ProductsController.createProduct);
+//checkRole(["ADMIN", "PREMIUM"]), middleware retirado para pruebas 01/04/24
 router.put("/:pid", checkRole(["ADMIN", "PREMIUM"]), ProductsController.modifProduct);
 
 //Para ingresar un array de Productos desde el body
