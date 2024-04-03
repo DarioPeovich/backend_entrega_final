@@ -1,7 +1,9 @@
+
 export class ProductsRepository {
     constructor (dao) {
         this.dao = dao;
     }
+ 
     async getProducts () {
         try {
             const products = await this.dao.getProducts();

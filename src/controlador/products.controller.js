@@ -30,8 +30,8 @@ class ProductsController {
       //res.render("products", {products} );
 
       //Comentar, solo para pruebas
-      res.send({
-        status: "succes",
+      res.status(200).send({
+        status: "success",
         products,
       });
       //-------------
@@ -52,7 +52,7 @@ class ProductsController {
       // const product = await productsDao.getProductById(pid);
       const product = await productsService.getProductById(pid);
       res.send({
-        status: "succes",
+        status: "success",
         msg: "Product hallado",
         product,
       });
@@ -110,7 +110,7 @@ class ProductsController {
       // const result = await productsDao.createProduct(product);
       const result = await productsService.createProduct(product);
       res.send({
-        status: "succes",
+        status: "success",
         msg: "Producto creado",
         result,
       });
@@ -162,7 +162,7 @@ class ProductsController {
       // const result = await productsDao.updateProduct(pid, product)
       const result = await productsService.updateProduct(pid, product);
       res.send({
-        status: "succes",
+        status: "success",
         msg: `Ruta PUT de PRODUCTS con ID: ${pid}`,
         result,
       });
@@ -207,7 +207,7 @@ class ProductsController {
       }
       const result = await productsService.deleteProduct(pid);
       res.status(200).send({
-        status: "succes",
+        status: "success",
         msg: `Ruta DELETE de PRODUCTS con ID: ${pid}`,
         result,
       });

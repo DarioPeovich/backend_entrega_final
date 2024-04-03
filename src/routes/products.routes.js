@@ -11,7 +11,9 @@ router.get("/", ProductsController.getProducts);
 
 router.get("/:pid", ProductsController.getProductId);
 
+router.post("/testing",  ProductsController.createProduct);     //Para testing, sin chekRole
 router.post("/",  checkRole(["ADMIN", "PREMIUM"]), ProductsController.createProduct);
+
 //checkRole(["ADMIN", "PREMIUM"]), middleware retirado para pruebas 01/04/24
 router.put("/:pid", checkRole(["ADMIN", "PREMIUM"]), ProductsController.modifProduct);
 

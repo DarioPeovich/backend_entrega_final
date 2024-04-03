@@ -1,31 +1,17 @@
-
 import supertest from "supertest";
-import productsModel from "../src/dao/models/products.model.js"
-// import chai from "chai";
-//const chai = require("chai");
 import { expect } from "chai";
-//import chai from "chai";
+import { app } from "../src/app.js";
 
-import {app} from "../src/app.js"
-
-//const expect = chai.expect;
 const requester = supertest(app);
 
-
-describe( "Testing de App e-Commerce", () => {
+describe("Testing de App e-Commerce", () => {
     
-    describe("Test de modulo Productos", ()=>{
-
-        it("El endPpoint post /api/products crea un producto correctamente", async function() {
-
-            const mockUser = {
-                email: "pepe@gmail.com",
-                password: "1234"
-            };
-
+    describe("Test de crear Productos", () => {
+        it("El endpoint post /api/products crea un producto correctamente", async () => {
+            // Crea un producto
             const productMock = {
                 title: "Papas Fritas",
-                description: "Papas fritas Lia x 150 grs.",
+                description: "Papas fritas Lays x 150 grs.",
                 code: 54874,
                 price: 1500,
                 status: true,
@@ -34,27 +20,47 @@ describe( "Testing de App e-Commerce", () => {
                 owner: "dario@gmail.com",
                 thumbnails: []
             };
-            const resultLogin = await requester.post("/api/sessions/login").send(mockUser);
-            
-            console.log(resultLogin);
-            
-            const result = await requester.post("/api/products").send(productMock);
-            //console.log(result);
-            const {statusCode, _body} = result;
-            expect(statusCode).to.be.equal(200);
-            expect(_body.status).to.be.equal("succes")
-            expect(_body.result).to.have.property("_id");
 
+            
+            const result = await requester.post("/api/products/testing").send(productMock);
+
+            // Verifica que la creación del producto fue exitosa
+            expect(result.status).to.equal(200);
+            expect(result.body.status).to.equal("success");
+            expect(result.body.result).to.have.property("_id");
+        });
+    });
+
+    describe("Test de modulo Productos", () => {
+        it("El endpoint GET /api/products devuelve array de productos", async () => {
+            
+            
+            const result = await requester.get("/api/products/")
+
+            //Se verifica que devuelva status 200 y un array
+            expect(result.status).to.equal(200);
+            expect(result.body.status).to.equal("success");
+            //expect(result.body.products).to.be.an('array');
+            expect(result._body.products.docs).to.be.an('array'); // Verificar la propiedad docs
         })
-
     })
 
-    // describe("Test de otro", ()=>{
 
-    //     it("", async function() {
+    describe("Test de modulo Productos", () => {
+        it("El endpoint GET /api/products/:pid devuelve objeto de producto", async () => {
+            
+            const idProduct = "65c3de3700689c36aaddd2d5"    //id producto existente
+            //para porducto inexistente devuelve 404
+            //const idProduct = ""    //id producto existente
+            
+            const result = await requester.get(`/api/products/${idProduct}`);
 
-    //     })
+            //Se verifica que devuelva status 200 y un array
+            expect(result.status).to.equal(200);
+            expect(result.body.status).to.equal("success");
+            expect(result.body.product).to.be.an('object');
+        })
+    })
 
-    // })
 
-})
+});
