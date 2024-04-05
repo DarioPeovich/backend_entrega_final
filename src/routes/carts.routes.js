@@ -17,7 +17,9 @@ router.post("/", CartsController.createCart);
 //Se agrega al Carrito, un array de productos, que viene del body
 router.post("/:cid", checkRole(["USER", "PREMIUM"]), CartsController.cartManyProducts);
 
+router.post("/:cid/product/:pid/testing", CartsController.cartAgregateProductTesting); //Para testing, sin checRole
 router.post("/:cid/product/:pid", checkRole(["USER", "PREMIUM"]), CartsController.cartAgregateProduct);
+
 
 router.delete("/:cid", CartsController.cartDelete);
 

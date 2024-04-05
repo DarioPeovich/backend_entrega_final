@@ -185,6 +185,32 @@ class CartsController{
           }
       
       }
+      static cartAgregateProductTesting = async (req, res) => {
+        //creo
+        const cid = req.params.cid;
+        const pid = req.params.pid;
+        const quantity = req.body.quantity;
+          try {
+              //Se valida que un un usuario premium no pueda agregar a su carrito un producto que le pertenece
+              const product = await productsService.getProductById(pid);
+              const result = await cartService.updateCart(cid, pid, quantity);
+
+              //console.log(result);
+              res.status(200).send({
+                  status: "succes",
+                  msg: `Ruta POST CART - Agrego producto al carrito. CID: ${cid} - PID: ${pid}`,
+                  result,
+                });
+             }
+             catch (error) {
+              console.error("Error:", error.message);
+              res.status(404).send({
+                  status: "error",
+                  msg: error.message,
+              });
+          }
+      
+      }
 
     static cartDelete = async (req, res) => {
         const cid = req.params.cid;

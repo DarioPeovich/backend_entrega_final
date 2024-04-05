@@ -56,7 +56,6 @@ const inicializePassport = () => {
             }
             // const result = await userModel.create(newUser);
             const result = await userDao.createUser(newUser);
-            
             return done (null, result);
 
         } catch (error) {

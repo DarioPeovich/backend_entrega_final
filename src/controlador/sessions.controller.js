@@ -13,13 +13,14 @@ class SessionsController{
         const token = generateToken(req.user);
 
         // Devuelve el token JWT al cliente
-        res.json({ token });
+        res.status(200).json({status:"success", token });
+        //res.status(200).json({token });
         //res.send({status:"success", message:"User registrado"})
     }
 
     static sessionsFailRegister = async (req,res)=>{
         console.log('Fallo el registro');
-        res.send({error: 'fallo en el registro'})
+        res.status(400).send({error: 'fallo en el registro'})
     }
 
    static sessionsCurrent = async (req, res) => {
