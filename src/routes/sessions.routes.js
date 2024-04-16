@@ -4,6 +4,7 @@ import {createHash, validatePassword} from "../utils.js"
 import passport from "passport";
 import {SessionsController} from "../controlador/sessions.controller.js"
 import { authToken } from "../utils.js";
+import { uploader } from "../utils.js";
 
 
 const router = Router();
@@ -20,7 +21,7 @@ const privateAccess = (req,res,next) =>{
     next();
 }
 
-router.post("/register",passport.authenticate("register", {failureRedirect:"/api/sessions/failregister"}), SessionsController.sessionsRegister)
+router.post("/register", uploader.single('thumbnail'), passport.authenticate("register", {failureRedirect:"/api/sessions/failregister"}), SessionsController.sessionsRegister)
 
 router.get("/failregister", SessionsController.sessionsFailRegister)
 

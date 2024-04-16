@@ -1,4 +1,4 @@
- import { userDao } from "../dao/index.js";
+import { userDao } from "../dao/index.js";
 import { userService } from "../dao/repository/index.js";
 
 class UserController {
@@ -81,6 +81,27 @@ class UserController {
         return res.status(200).send({status:"succes", result} );
     }
 
+    static cargarDocuments = async (req, res) => {
+        const uid = req.params.uid;
+        const filename = req.file.filename;
+
+        if(!filename){
+            return res.status(400).send({
+                status:"error",
+                error:"No se pudo cargar la imagen"
+            })
+        }  
+        const file = {
+            name: filename,
+            reference: `http://localhost:8080/images/documents/${filename}`
+        }
+
+        const user = await userService.getIdUser(uid)
+        user.documents.push(file);
+        const result = await userService.updateUser(uid, user);
+        return res.status(200).send({status:"succes", result });
+    }
+
     static changeRole = async (req, res) => {
         // const user = await userDao.createUser(user);
 
@@ -90,7 +111,12 @@ class UserController {
         if (user.role !== "ADMIN") {
             switch(user.role) {
                 case "USER":
-                    user.role = "PREMIUM"
+                    if (user.documents.length >= 3) {
+                        user.role = "PREMIUM"
+                    } else {
+                        return res.status(400).send({status:"error", message:"El usuario no ha cargado los 3 documentos obligatorios de Identificacion" });
+                    }
+
                     break;
                 case "PREMIUM":
                     user.role = "USER"

@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import { Faker, en } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
 import { config } from "./config/config.js";
+import multer from "multer";
+import { join } from "path"; // Importa la función join del módulo path
 import { error } from "console";
 /*** */
 export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -18,10 +20,7 @@ export default __dirname;
 
 //Faker: Libreria para generar datos para pruebas
 export const customFaker = new Faker({ locale: [en] });
-
 const { commerce, image, database, string, internet, person, phone,datatype, lorem } = customFaker;
-
-
 export const generateProduct = () =>{
     return {
         id: database.mongodbObjectId(),
@@ -80,3 +79,45 @@ export const verifyEmailToken = (token)=>{
     }
 };
 //Fin de token para mail
+
+//======= MULTER: CARRA DE ARCHIVOS EN EL SERVIDOR
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        let destination = "";
+        const ruta = req.originalUrl
+        //console.log("req.req.originalUrl", ruta)
+        // Verificar la ruta del endpoint y asignar la carpeta de destino correspondiente
+        if (ruta.startsWith('/api/products')) {
+            destination = join(__dirname, '/public/images/products');
+        } else if (ruta.startsWith('/api/sessions/register')) {
+            destination = join(__dirname, '/public/images/profile');
+        } else if (ruta.startsWith('/api/users')) {
+            if (ruta.includes('/documents')) {
+                destination = join(__dirname, '/public/images/documents');
+            }
+        } 
+
+        if (destination === "") {
+            destination = join(__dirname, '/public/images');
+        }
+
+        cb(null, destination);
+    },
+    filename: function (req, file, cb) {
+        //console.log("entre")
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+export const uploader = multer({ storage });
+
+// const storage = multer.diskStorage({
+//     destination:function(req,file,cb) {
+//      cb(null,`${__dirname}/public/images`); 
+//     },
+//     filename:function(req,file,cb) {
+//         console.log(file);
+//         cb(null,`${Date.now()}-${file.originalname}`)
+//     }
+// })
+// export const uploader = multer({storage});

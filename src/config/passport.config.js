@@ -32,7 +32,7 @@ const inicializePassport = () => {
     passport.use("register", new LocalStrategy(
         {passReqToCallback:true, usernameField:"email"},
         async ( req, username, password, done ) => {
-        const { first_name, last_name, email, age } = req.body;
+        const { first_name, last_name, email, age, role } = req.body;
         try {
             
             // let user = await userModel.findOne({email:username});
@@ -51,7 +51,8 @@ const inicializePassport = () => {
                 email,
                 age,
                 cart: cart._id,
-                password: createHash(password)
+                password: createHash(password),
+                role
                 //rol, ya está por default en schema userModel
             }
             // const result = await userModel.create(newUser);

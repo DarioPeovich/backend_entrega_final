@@ -39,13 +39,18 @@ class SessionsController{
 
     static sessionsLogin = async (req,res) =>{ 
         //console.log("en sessionsLogin de sessions.controller.js");
+        const uid = req.user._id;
         if(!req.user){
             return res.status(400).send({status:"error"})
         }
         //console.log("En sessions.controller.js req.user: ", req.user);
         const token = generateToken(req.user);
         //console.log("En sessions.controller.js token: ", token);
-        
+        const user = await userService.getIdUser(uid);
+        //console.log("=====user======", user);
+        user.last_connection = Date.now();
+        const userUpdate = await userService.updateUser(uid, user);
+
         res.status(200).send({status:"success", token})
     }
 

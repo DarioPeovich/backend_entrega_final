@@ -1,6 +1,6 @@
 <div>
     <h1>Registro</h1>
-    <form id="registerForm">
+    <form id="registerForm"  enctype="multipart/form-data">
         <label>Nombre</label>
         <input name="first_name">
         <br/>
@@ -19,6 +19,9 @@
         <label>Rol del Usuario</label>
         <input name="role">
         <label>"ADMIN o USER (mayúscula)"</label>
+        <br/>
+        <label>Imagen</label>
+        <input type="file" name="thumbnail">
         <br/>
         <input type="submit">
     </form>

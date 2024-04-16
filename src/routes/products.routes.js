@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductsController } from "../controlador/products.controller.js";
 import { checkRole } from "../middleware/auth.js";
 import { generateProduct } from "../utils.js";
+import { uploader } from "../utils.js";
 
 const router = Router();
 
@@ -12,7 +13,7 @@ router.get("/", ProductsController.getProducts);
 router.get("/:pid", ProductsController.getProductId);
 
 router.post("/testing",  ProductsController.createProduct);     //Para testing, sin chekRole
-router.post("/",  checkRole(["ADMIN", "PREMIUM"]), ProductsController.createProduct);
+router.post("/", uploader.single('thumbnails'),checkRole(["ADMIN", "PREMIUM"]), ProductsController.createProduct);
 
 //checkRole(["ADMIN", "PREMIUM"]), middleware retirado para pruebas 01/04/24
 router.put("/:pid", checkRole(["ADMIN", "PREMIUM"]), ProductsController.modifProduct);

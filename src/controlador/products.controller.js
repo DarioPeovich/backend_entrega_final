@@ -66,6 +66,14 @@ class ProductsController {
   };
 
   static createProduct = async (req, res) => {
+
+    const filename = req.file.filename;
+    if(!filename){
+        return res.send({
+            status:"error",
+            error:"No se pudo cargar la imagen"
+        })
+    }  
     const {
       title,
       description,
@@ -85,13 +93,13 @@ class ProductsController {
       !stock ||
       !category
     ) {
-      CustomError.createError({
-        name: "Product create error",
-        cause: generateUserErrorInfo(req.body),
-        message: "Error creando el Producto",
-        errorCode: EError.INVALID_PARAM,
-      });
-      //return res.status(400).send({ error: "Datos incompletos" });
+      // CustomError.createError({
+      //   name: "Product create error",
+      //   cause: generateUserErrorInfo(req.body),
+      //   message: "Error creando el Producto",
+      //   errorCode: EError.INVALID_PARAM,
+      // });
+       return res.status(400).send({ error: "Datos incompletos" });
     }
 
     const product = {
@@ -102,7 +110,7 @@ class ProductsController {
       status,
       stock,
       category,
-      thumbnails,
+      thumbnails: `http://localhost:8080/images/products/${filename}`,    //Esto es posible gracias a el middleware: app.use(express.static(__dirname + "/public"));
       owner: req.user && req.user.email ? req.user.email : "ADMIN",
     };
     try {

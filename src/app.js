@@ -111,6 +111,6 @@ io.on("connection", (socket) => {
 });
 
 //middleware`s
-//app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
+// app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
 
 export {app};

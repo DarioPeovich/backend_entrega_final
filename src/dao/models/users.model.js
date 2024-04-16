@@ -17,6 +17,11 @@ const schema = new mongoose.Schema({
         required:true,
         enum:["USER","ADMIN", "PREMIUM"],
         default: "USER"
+    },
+    documents: [],
+    last_connection: {
+        type: Date,
+        default: Date.now // Establece la fecha actual como valor predeterminado
     }
 })
 const userModel = mongoose.model(collection,schema);
