@@ -35,7 +35,9 @@ class ViewsController{
           const products = result.msg;
       
           //Habilitar para la entrega
-          res.render("products", {products, user:req.session.user} );
+          //
+
+          res.render("products", {products, user:req.user} );
       
           //Es solo para pruebas: Comentar para entregar, 
           // res.send({

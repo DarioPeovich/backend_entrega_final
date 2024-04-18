@@ -34,7 +34,7 @@ const inicializePassport = () => {
         async ( req, username, password, done ) => {
         const { first_name, last_name, email, age, role } = req.body;
         try {
-            
+            const filename = req.file.filename;
             // let user = await userModel.findOne({email:username});
             //let user = await userDao.getEmailUser({username});
             let user = await userDao.getEmailUser(username);
@@ -52,7 +52,8 @@ const inicializePassport = () => {
                 age,
                 cart: cart._id,
                 password: createHash(password),
-                role
+                role,
+                profileImage:`http://localhost:8080/images/profile/${filename}`
                 //rol, ya está por default en schema userModel
             }
             // const result = await userModel.create(newUser);
@@ -110,6 +111,10 @@ const inicializePassport = () => {
         clientSecret:"f5352593c772214e13d8972b06f78be03afbd577",
         callbackURL:"http://localhost:8080/api/sessions/githubcallback"
     }, async(accesToken, refreshToken,profile, done)=>{
+        
+        console.log("Entre a gitHub en passport.config.js")
+
+
         try {
             // console.log(profile._json.name);
             const first_name = profile._json.name

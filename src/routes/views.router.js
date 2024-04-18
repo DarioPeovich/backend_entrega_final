@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ViewsController } from "../controlador/views.controllers.js";
+import { authToken } from "../utils.js";
 
 const router = Router();
 
@@ -7,7 +8,7 @@ const router = Router();
 router.get("/carts/:cid", ViewsController.getViewCartId);
 
 //Router Productos
-router.get("/products", ViewsController.getViewProducts);
+router.get("/products", authToken, ViewsController.getViewProducts);
 
 //Rutas Chat
 router.get("/chat", ViewsController.getViewChat);
@@ -35,7 +36,7 @@ router.get("/register", publicAccess, ViewsController.sessionRegister);
 
 router.get("/login", publicAccess, ViewsController.sessionLogin);
 
-router.get("/current", ViewsController.sessionProfile); // current
+router.get("/current", privateAccess, ViewsController.sessionProfile); // current
 //current authToken, privateAccess  ==> de /current
 
 router.get("/resetPassword", ViewsController.sessionResetPassword);

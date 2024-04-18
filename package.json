@@ -54,6 +54,7 @@
     "mongoose": "^8.0.3",
     "mongoose-paginate-v2": "^1.7.4",
     "ms": "^2.0.0",
+    "multer": "^1.4.5-lts.1",
     "negotiator": "^0.6.3",
     "nodemailer": "^6.9.12",
     "object-inspect": "^1.13.1",

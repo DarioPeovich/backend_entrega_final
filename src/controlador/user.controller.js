@@ -14,14 +14,30 @@ class UserController {
         }
     }
 
+    // static getIdUser = async (req, res) => {
+    //     const uid = req.params.uid;
+    //     //console.log("En controllers user, uid:", uid)
+    //     // const user = await userDao.getIdUser(idUser);
+    //     const user = await userService.getIdUser(uid);
+    //     return res.status(200).send({status:"succes", user });
+
+    // }
     static getIdUser = async (req, res) => {
         const uid = req.params.uid;
-        //console.log("En controllers user, uid:", uid)
-        // const user = await userDao.getIdUser(idUser);
-        const user = await userService.getIdUser(uid);
-        return res.status(200).send({status:"succes", user });
-
+        try {
+            const user = await userService.getIdUser(uid);
+            return res.status(200).send({ status: "success", user });
+        } catch (error) {
+            if (error instanceof Error && error.message.includes('No se encontró ningún usuario')) {
+                // Manejar el caso específico de que no se encontró ningún usuario
+                return res.status(404).send({ status: "error", message: "Usuario no encontrado" });
+            } else {
+                // Manejar otros errores
+                return res.status(500).send({ status: "error", message: "Error al obtener el usuario" });
+            }
+        }
     }
+    
 
     static getEmailUser = async (req, res) => {
         const email = req.query.email; // Obtener el parámetro de consulta email
@@ -53,6 +69,26 @@ class UserController {
         const result = await userService.createUser(user);
         
         return res.status(200).send({status:"succes", result });
+    }
+
+    static deleteUser = async (req, res) => {
+        const uid = req.params.uid;
+        //console.log("en user.controllers.js uid:", uid)
+        if (!uid) {
+            return res.status(401).send({error:"Se debe proporcionar un ID de usuario"});
+        }
+        const result = await userService.deleteUser(uid);
+        // console.log("en user.controllers.js result:", result)
+        if (result.acknowledged && result.deletedCount > 0) {
+            //res.status(200).send({status:"succes", result, message:`Usuario eliminado ${uid}`})
+            return res.status(200).send({
+                status: "success",
+                msg: `Usuario eliminado ${uid}`,
+                result
+            });
+        }else {
+            return res.status(401).send({error:"Usuario inexistente"});
+        }
     }
 
     static updateUser = async (req, res) => {
@@ -104,7 +140,7 @@ class UserController {
 
     static changeRole = async (req, res) => {
         // const user = await userDao.createUser(user);
-
+        
         const uid = req.params.uid;
         const user = await userService.getIdUser(uid);
         //Logica para cambiar de Role

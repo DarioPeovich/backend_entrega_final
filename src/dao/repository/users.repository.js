@@ -39,4 +39,10 @@ export class UserRepository {
       return createdUser;
      }
 
+     deleteUser = async (uid) => {
+      //console.log("En repository,js uid: ", uid)
+      const result = await this.dao.deleteUser(uid);
+      return result;
+     }
+
 }

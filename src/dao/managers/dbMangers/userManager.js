@@ -14,7 +14,10 @@ class UserManagerDB {
         try {
             const user = await userModel.findOne({ _id: idUser});
             if (!user) {
-                throw new Error(`No se encontró ningún usuario con el ID: ${idUser}`);  //se lanza una excepcion, para capturarla desde el Route
+                //throw new Error(`No se encontró ningún usuario con el ID: ${idUser}`);  //se lanza una excepcion, para capturarla desde el Route
+                //throw new Error(`No se encontró ningún usuario con el ID: `);
+                //console.log("En userMnager.js, No se hallo un usuario")
+
             }
             return user;
         } catch (error) {
@@ -47,6 +50,15 @@ class UserManagerDB {
         } catch (error) {
             console.log("Error en lectura de archivos!!");
             throw error;
+        }
+    }
+
+    deleteUser = async (uid) => {
+        try {
+             const result = await userModel.deleteOne({ _id: uid });
+            return result;
+        } catch (error) {
+            throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
         }
     }
 }

@@ -81,8 +81,7 @@ class ProductsController {
       price,
       status,
       stock,
-      category,
-      thumbnails,
+      category
     } = req.body; //json con el producto
     if (
       !title ||
@@ -101,7 +100,8 @@ class ProductsController {
       // });
        return res.status(400).send({ error: "Datos incompletos" });
     }
-
+    let thumbnails = []; // Inicializar un array vacío si aún no existe
+    thumbnails.push(`http://localhost:8080/images/products/${filename}`);
     const product = {
       title,
       description,
@@ -110,9 +110,10 @@ class ProductsController {
       status,
       stock,
       category,
-      thumbnails: `http://localhost:8080/images/products/${filename}`,    //Esto es posible gracias a el middleware: app.use(express.static(__dirname + "/public"));
+      thumbnails,
       owner: req.user && req.user.email ? req.user.email : "ADMIN",
     };
+    //thumbnails: `http://localhost:8080/images/products/${filename}`,    //Esto es posible gracias a el middleware: app.use(express.static(__dirname + "/public"));
     try {
       //const result = await productMangerDB.createProduct(product);    //Cambiado x productsdao 10/02/24
       // const result = await productsDao.createProduct(product);

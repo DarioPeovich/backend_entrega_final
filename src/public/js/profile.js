@@ -1,4 +1,5 @@
-console.log(`Bearer ${localStorage.getItem("token")}`);
+// console.log(`Bearer ${localStorage.getItem("token")}`);
+
 fetch("/api/sessions/current", {
     method:"GET",
     headers:{

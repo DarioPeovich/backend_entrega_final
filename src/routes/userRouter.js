@@ -13,10 +13,13 @@ const router = Router();
 
     router.post("/:uid/documents", uploader.single('thumbnail'), UserController.cargarDocuments);
 
+    router.post("/delete/:uid", UserController.deleteUser);
+
     router.post("/", UserController.createUser);
        
     router.put("/:uid", UserController.updateUser);
 
+    
     
 
 export { router as userRouter };

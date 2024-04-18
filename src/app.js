@@ -66,7 +66,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 console.log("En app.js habilitar addLogger middleWare")
-//app.use(addLogger);   //Este es un middleWare para manejo de errores. debe ir antes de las rutas!!
+// app.use(addLogger);   //Este es un middleWare para manejo de errores. debe ir antes de las rutas!!
 
 //Rutas
 app.use("/api/products", productRouter);
@@ -111,6 +111,6 @@ io.on("connection", (socket) => {
 });
 
 //middleware`s
-// app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
+//app.use(errorHandler);    //Este es un middleWare de manejo personaliado de errores. debe ir si o si al final de la app, 
 
 export {app};

@@ -32,11 +32,9 @@ form.addEventListener("submit", e => {
         localStorage.setItem("token", token);
         
         // Redirecciona u realiza otras acciones según sea necesario
-         window.location.replace('/products')
+         window.location.replace(`/products?token=${token}`)
+
     }).catch(error => {
         console.error('Error:', error);
     });
 });
-
-
-

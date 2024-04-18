@@ -22,7 +22,8 @@ const schema = new mongoose.Schema({
     last_connection: {
         type: Date,
         default: Date.now // Establece la fecha actual como valor predeterminado
-    }
+    },
+    profileImage:String
 })
 const userModel = mongoose.model(collection,schema);
 
