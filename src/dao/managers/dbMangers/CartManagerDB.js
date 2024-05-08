@@ -161,19 +161,22 @@ updateCartMany = async (idCart, products) => {
   }
 
   deleteProductCart = async (idCart, idProduct) => {
+
+    //console.log("en product.managers. idProduct: ", idProduct);
     try {
       const cart = await this.getIdCart(idCart)
       if (!cart) { 
         throw new Error(`No se encontró ningún carrito con el ID: ${idCart}`);  //se lanza una excepcion, para capturarla desde el Route
       }
       //const productIndex = cart.products.findIndex((product) => product.id === idProduct);
-      const productIndex = cart.products.findIndex((productInCart) => {
-        return productInCart.product._id.toString() === idProduct.toString();
+      const productIndex = cart.products.findIndex( (productInCart) => {
+            return productInCart.product._id.toString() === idProduct.toString();
       });
 
       if (productIndex === -1) {
         throw new Error(`No se encontró en el carrito con el ID: ${idCart}, el producto a borrar con id.: ${idProduct}`);  //se lanza una excepcion, para capturarla desde el Route
       }
+      //console.log("en product.managers. productIndex: ", productIndex, " Producto: ", cart.products[productIndex].description);
       cart.products.splice(productIndex, 1)
 
       //const result = await cart.save();

@@ -14,7 +14,7 @@ class UserManagerDB {
         try {
             const user = await userModel.findOne({ _id: idUser});
             if (!user) {
-                //throw new Error(`No se encontró ningún usuario con el ID: ${idUser}`);  //se lanza una excepcion, para capturarla desde el Route
+                // throw new Error(`No se encontró ningún usuario con el ID: ${idUser}`);  //se lanza una excepcion, para capturarla desde el Route
                 //throw new Error(`No se encontró ningún usuario con el ID: `);
                 //console.log("En userMnager.js, No se hallo un usuario")
 
@@ -27,12 +27,33 @@ class UserManagerDB {
 
     getEmailUser = async (email) => {
         try {
-            const user = await userModel.findOne({email:email})
-            return user
+            const user = await userModel.findOne({ email: email });
+            //Se valida en los llamantes
+            // if (!user) {
+            //     throw new Error(`No se encontró ningún usuario con el correo electrónico: ${email}`);
+            // }
+            return user;
         } catch (error) {
+            // Aquí podrías realizar un registro del error antes de volver a lanzarlo
+            console.error("Error en getEmailUser:", error);
             throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
         }
     }
+    
+    // getEmailUser = async (email) => {
+    //     try {
+    //         const user = await userModel.findOne({email:email})
+    //         if (!user) {
+    //              throw new Error(`No se encontró ningún usuario con el ID: ${email}`);  //se lanza una excepcion, para capturarla desde el Route
+    //             //throw new Error(`No se encontró ningún usuario con el ID: `);
+    //             //console.log("En userMnager.js, No se hallo un usuario")
+
+    //         }
+    //         return user
+    //     } catch (error) {
+    //         throw error; // Vuelve a lanzar la excepción para que la ruta la maneje el Router
+    //     }
+    // }
 
     updateUser = async (uid, user) => {
         try {

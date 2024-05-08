@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{!-- <head>
+    <meta charset="UTF-8">
+    <title>Formulario de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-..." crossorigin="anonymous">
+</head> --}}
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">Agregar Producto</h1>
+        <form id="productForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="code" class="form-label">Código</label>
+                <input type="number" class="form-control" id="code" name="code" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stock" name="stock" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <input type="text" class="form-control" id="category" name="category" required>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Estado</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+           {{!-- <div class="mb-3">
+                <label for="thumbnail" class="form-label">Imagen del Producto</label>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
+            </div> --}}
+            {{!-- hasta aca --}}
+            <div class="mb-3">
+                <label for="thumbnail" class="form-label">Imagen</label>
+            <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+        </div>
+            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+        </form>
+
+        <h2 class="mt-5 mb-3">Productos Agregados</h2>
+        <div id="productsList"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/products.crud.js"></script>
+</body>
+
+</html>

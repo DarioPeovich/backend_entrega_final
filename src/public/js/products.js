@@ -1,54 +1,58 @@
-// *---------------------------
-// NO SE UserActivation, SE HIZO PARA PRUEBAS. 28/02/24
-// *----------------------------------
+let errorCode = null; // Variable global para almacenar el código de error HTTP
 
-const form = document.getElementById('purchaseForm');
-const cartId = document.querySelector('input[name="cart_id"]');
+document.addEventListener("DOMContentLoaded", function() {
+    const btnsAddToCart = document.querySelectorAll(".btnAddToCart");
 
-const ticketInfoElement = document.getElementById('ticketInfo');
+    if (btnsAddToCart) {
+        btnsAddToCart.forEach(btn => {
+            btn.addEventListener("click", async function(event) {
+                const cartIdElement = document.getElementById("cartId");
+                const cartId = cartIdElement.innerText;
+                const productId = btn.getAttribute("data-pid");
+                try {
+                    // console.log("cartId: ", cartId);
+                    // console.log("productId: ", productId);
 
-form.addEventListener('submit', e => {
-    e.preventDefault();
+                    const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "authorization": `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
 
-    const linkPurchase = "/api/carts/" + cartId.value + "/purchase";
+                    if (!response.ok) {
+                        errorCode = response.status; // Almacenar el código de estado del error
+                        let errorMessage = "Error al agregar el producto al carrito";
+                        if (response.status === 403) {
+                            errorMessage = "No estás autorizado para agregar este producto al carrito";
+                        }
+                        throw new Error(errorMessage);
+                        
+                    }
 
-    fetch(linkPurchase, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    }).then(result => result.json()).then(json => {
-        // Verificar si la respuesta indica éxito
-        
-        if (json.status === "success"  && json.ticketCreated) {
-
-           // Mostrar SweetAlert de éxito
-            Swal.fire({
-                title: "Success!",
-                text: "Registro exitoso.",
-                icon: "success",
+                    // Si llegamos aquí, el producto se agregó exitosamente al carrito
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Producto agregado al carrito',
+                        showConfirmButton: false,
+                        timer: 1500 // Tiempo en milisegundos para cerrar automáticamente el popup
+                    });
+  
+                    console.log("Producto agregado al carrito con éxito");
+                } catch (error) {
+                    //console.error("Error:", error.message);
+  
+                    Swal.fire({
+                      icon: 'error',
+                      title: error.message,     //'Error al agregar el producto al carrito',
+                      text: 'Por favor, intenta nuevamente más tarde.',
+                      text: errorCode === 403 ? '' : 'Por favor, intenta nuevamente más tarde.',
+                    });
+                    // Puedes mostrar un mensaje de error al usuario si la solicitud falla
+                }
             });
-            // Mostrar la información del ticket en el elemento HTML
-            const ticketCreated = json.ticketCreated;
-            ticketInfoElement.innerHTML = `
-                <p>Código de ticket: ${ticketCreated.code}</p>
-                <p>Fecha de compra: ${ticketCreated.purchase_datetime}</p>
-                <p>Monto total: ${ticketCreated.amount}</p>
-                // <p>Comprador: ${ticketCreated.purchaser}</p>
-            `;
-            // Puedes redirigir a otra página si es necesario
-            // window.location.href = "/success-page";
-        } else {
-            // Si hay errores, puedes manejarlos aquí o simplemente mostrar una alerta
-            console.error("Registration failed:", json.error);
-            Swal.fire({
-                title: "Error!",
-                text: "Compra fallida:" + json.error,
-                icon: "error",
-            });
-        }
-    })
-    
-})
+        });
+    }
+});
 
-//CartId: 6590707032eef4df1cabff6a

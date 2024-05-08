@@ -104,7 +104,7 @@ class SessionsController{
         if(!validToken || validToken == null){
             //console.log("token no valido")
             return res.status(401).send({status:"error",
-            message: `El token ya no es valido. Intente la resaturacion nuevamente!`});
+            message: `El token ya no es valido. Intente la restauracion nuevamente!`});
         }
 
         if (!email || !newPassword) {

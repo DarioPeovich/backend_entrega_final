@@ -13,7 +13,11 @@ const router = Router();
 
     router.post("/:uid/documents", uploader.single('thumbnail'), UserController.cargarDocuments);
 
+    router.post("/:uid/profileimagen", uploader.single('thumbnail'), UserController.profileImagen);
+
     router.post("/delete/:uid", UserController.deleteUser);
+
+    router.post("/deletetimeout", UserController.deleteUserTimeOut);
 
     router.post("/", UserController.createUser);
        

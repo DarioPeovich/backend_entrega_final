@@ -31,7 +31,7 @@ form.addEventListener("submit", e => {
         // Guarda el token en localStorage
         localStorage.setItem("token", token);
         
-        // Redirecciona u realiza otras acciones según sea necesario
+        // Redirecciona a handlebars products
          window.location.replace(`/products?token=${token}`)
 
     }).catch(error => {

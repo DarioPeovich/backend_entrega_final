@@ -1,62 +1,72 @@
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Carrito de Compras</title>
-    <link rel="stylesheet" href="/css/styles.css" />
-  </head>
-  <body>
-    <div>
-      <p> Bienvenido, {{user.full_name}}</p>
-      <p>{{user.email}}</p>
-      <p>{{user.rol}}</p>
-      {{!-- <a href="/api/sessions/logout"><button>Salir</button></a> --}}
-      <a id="btn_salir" onclick="logout()"><button>Salir</button></a>
-    </div>
 
-    {{!-- Inicio No se usa. Para pruebas --}}
-    <div class="container">
-      <div class="content">
-        {{!-- <h4>Probar los todos los endpoint que involucre sesion de usuario desde esta pestaña. Al hacerlo desde otra dara error xp estoy usundo estregia local, pronto pasare JWT</h4> --}}
-        <h4>En el endPoint http://localhost:8080/carts/cid, hay un boton de Compra, para pruebas </h4>
-        {{!-- <form id="purchaseForm">
-          <label>Cart Id.</label>
-          <input name="cart_id" />
-          <button type="submit">Terminar Compra</button>
-          (Ingresar id. del carrito a cerrar la Compra)
-        </form> --}}
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrito de Compras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-..." crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="/css/products.css" />
+
+</head>
+
+<body>
+  <div class="container-fluid mx-10">
+    <div class="d-flex justify-content-between align-items-center mx-3 border mt-3">
+      <div class="mx-3">
+        <p class="fs-4">Bienvenido, {{user.full_name}}</p>
+        <p class="fs-5">{{user.email}}</p>
+        <p class="fs-6">{{user.rol}}</p>
+        <span>Identificador del carrito: </span><span id="cartId">{{user.cart}}</span>
+      </div>
+      <div class="mx-3">
+        <a id="btn_Cart" href="/carts/{{user.cart}}" class="btn btn-primary me-2">
+          <i class="bi bi-cart-fill"></i> Carrito
+        </a>
+        <a id="btn_salir" onclick="logout()" class="btn btn-danger me-2">logOut</a>
+        <a id="btn_profile" href="/current" class="btn btn-secondary" target="_blank">Profile</a>
       </div>
     </div>
-    {{!-- Fin No se usa. Para pruebas --}}
     <div>
       <h1>Productos</h1>
-      <ul>
-        {{#each products.docs}}
-          <li>{{this.title}}:
-            {{this.description}}
-            ${{this.price}}
-            Category:
-            {{this.category}}</li>
-          <button onclick="">Agregar al carrito</button>
-          <P>(Boton sin funcionalidad todavia, agregar productos desde postman)</P>
-        {{/each}}
-      </ul>
-      <div>
-        ||
-        {{#if products.hasPrevPage}}
-          <a href={{products.prevLink}}>Anterior</a>
-        {{/if}}
-        ||
-        <span>Página {{products.page}} de {{products.totalPages}}</span>
-        ||
-        {{#if products.hasNextPage}}
-          <a href={{products.nextLink}}>Siguiente</a>
-        {{/if}}
-        ||
+      <div class="product-list">
+        <div class="row">
+          {{#each products.docs}}
+          <div class="col-md-3">
+            <div class="card mb-3">
+              <img src="{{this.thumbnails.[0]}}" class="card-img-top" alt="Thumbnail del producto">
+              <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+                <p class="card-text">{{this.description}}.</p>
+                <p class="card-text">Precio: ${{this.price}}</p>
+                <p class="card-text">Stock: {{this.stock}}</p>
+                <button class="btn btn-primary btnAddToCart" data-cid="{{user.cart}}" data-pid="{{this._id}}">Agregar al carrito</button>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
       </div>
     </div>
+    <div>
+      ||
+      {{#if products.hasPrevPage}}
+      <a href={{products.prevLink}}>Anterior</a>
+      {{/if}}
+      ||
+      <span>Página {{products.page}} de {{products.totalPages}}</span>
+      ||
+      {{#if products.hasNextPage}}
+      <a href={{products.nextLink}}>Siguiente</a>
+      {{/if}}
+      ||
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/js/logout.js"></script>
+  <script src="/js/products.js"></script>
+</body>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/js/logout.js"></script>
-    {{!-- <script src="/js/products.js"></script> --}}
-  </body>
 </html>

@@ -14,6 +14,16 @@ export class ProductsRepository {
         }
     }
 
+    async getProductAll () {
+        try {
+            const products = await this.dao.getProductAll();
+            //console.log(products)
+            return products;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createProduct (productData) {
         try {
             const updatedProduct = await this.dao.createProduct(productData);

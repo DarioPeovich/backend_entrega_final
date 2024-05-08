@@ -1,4 +1,5 @@
 import express from 'express';
+import { join } from "path"; // Importa la función join del módulo pathimport { cartRouter } from './routes/carts.routes.js';
 import { cartRouter } from './routes/carts.routes.js';
 import { productRouter } from './routes/products.routes.js';
 import { viewsRouter } from './routes/views.router.js';
@@ -42,6 +43,10 @@ app.set("views", __dirname + "/views");
 
 app.use(express.static(__dirname + "/public"));
 
+// Define la ruta de los archivos estáticos de bootstrap-icons
+app.use('/bootstrap-icons', express.static(__dirname + '/node_modules/bootstrap-icons'));
+
+// app.use('/bootstrap-icons', express.static(join(__dirname, 'node_modules/bootstrap-icons')));
 
 //Configurando Mono Atlas
 //const MONGO =  "mongodb+srv://dariofmpeovich:Cr2S8oiuOf1U9rzf@cluster0.zm3q7vj.mongodb.net/ecommerce";
@@ -80,6 +85,7 @@ app.use("/", viewsRouter);
 
 //Documentacion de end point 
 app.use("/api/docs",swaggerUi.serve,swaggerUi.setup(swaggerSpecs));
+
 
 const httpServer = app.listen(PORT, ()=>{console.log(`Servidor funcionando en el puerto: ${PORT}`);})
 

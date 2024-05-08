@@ -10,16 +10,23 @@ export const checkRole = (roles)=>{
 
         if(!req.user){
             console.log("Usuario no autenticado");
-            return res.json({status:"error",
-            message:"necesitas estar autenticado"},);
+            return res.status(401).json({
+                status: "error",
+                message: "necesitas estar autenticado."
+            });
         }
-        console.log("roles: (checkRole)", roles);
-        console.log("req.user.rol (checkRole): ", req.user.role)
+        //console.log("roles: (checkRole)", roles);
+        //console.log("req.user.rol (checkRole): ", req.user.role)
+
         if(!roles.includes(req.user.role)){
-            console.log("Usuario no estas autorizado");
-            return res.json({status:"error", message:"no estas autorizado"});
+            console.log("Usuario no autorizado");
+            // return res.json({status:"error", message:"no estas autorizado"});
+            return res.status(403).json({
+                status: "error",
+                message: "No estás autorizado para realizar esta acción."
+            });
+            
         }
         next();
     }
 }
-

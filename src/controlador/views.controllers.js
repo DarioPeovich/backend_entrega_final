@@ -1,6 +1,7 @@
 import messagesModel from "../dao/models/messages.model.js"
 import { cartsDao } from "../dao/index.js"
 import { productsDao } from "../dao/index.js";
+import { userService } from "../dao/repository/index.js";
 
 class ViewsController{ 
 
@@ -29,9 +30,9 @@ class ViewsController{
     static getViewProducts = async (req, res) => {
         try {
     
-          const { limit, page, sort, category, availability, query } = req.query;
+          const { limit, page, sort, category, availability, query, token } = req.query;
           
-          const result = await productsDao.getProducts(limit,page,sort,category,availability,query);
+          const result = await productsDao.getProducts(limit,page,sort,category,availability,query, token);
           const products = result.msg;
       
           //Habilitar para la entrega
@@ -52,6 +53,57 @@ class ViewsController{
            }
         
         }
+
+        static getViewProducsCrud = async (req, res) => {
+          try {
+      
+            // const { limit, page, sort, category, availability, query } = req.query;
+            
+            // const result = await productsDao.getProducts(limit,page,sort,category,availability,query);
+            // const products = result.msg;
+             const products = {};
+            //Habilitar para la entrega
+            //
+  
+            res.render("productsCrud", {products} );
+        
+            //Es solo para pruebas: Comentar para entregar, 
+            // res.send({
+            //   status: "succes",
+            //   products,
+            // });
+            //-------------
+        
+             } catch (error) {
+              console.log("Error en lectura de archivos:", error);
+               return res.status(400).send({ error: "Error en lectura de archivos" });
+             }
+          
+          }
+        
+
+    //Controllers Views User
+    static getUsers = async (req, res) => {
+      try {
+  
+        const users = await userService.getUsers()
+
+
+        res.render("users", {users} );
+    
+        //Es solo para pruebas: Comentar para entregar, 
+        // res.send({
+        //   status: "succes",
+        //   products,
+        // });
+        //-------------
+    
+         } catch (error) {
+          console.log("Error en lectura de archivos:", error);
+           return res.status(400).send({ error: "Error en lectura de archivos" });
+         }
+      
+      }
 
     //Controllers Views Chat
     static getViewChat = (req,res)=>{
@@ -81,7 +133,8 @@ class ViewsController{
     }
 
     static sessionProfile = (req,res)=>{
-       // res.render('profile', {user:req.user})
+      
+       //res.render('profile', {user:req.user})
        res.render('profile')
     }
 

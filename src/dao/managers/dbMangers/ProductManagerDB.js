@@ -4,8 +4,8 @@ import productsModel from "../../models/products.model.js"
 
 class ProductManagerDB {
 
-  getProducts = async (limit, page, sort, category, availability, query) => {
-    
+  getProducts = async (limit, page, sort, category, availability, query, token) => {
+
       try {
 
         const filter = {};
@@ -35,16 +35,28 @@ class ProductManagerDB {
 
         const products = await productsModel.paginate(filter, {...options});
         //console.log(products);
+        const baseUrl = '/products'; // Asegúrate de que esta sea la ruta base correcta de tu aplicación
 
-    if(products.hasPrevPage){
-      products.prevLink = `http://localhost:8080/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
-      //products.prevLink = `/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
-  }
+        if (products.hasPrevPage){
+            //products.prevLink = `${baseUrl}/?limit=${limit}&page=${products.prevPage}&sort=${sort}`;
+            products.prevLink = `${baseUrl}/?limit=${limit}&page=${products.prevPage}&sort=${sort}&token=${token}`;
+        }
+        
+        if (products.hasNextPage){
+            // products.nextLink = `${baseUrl}/?limit=${limit}&page=${products.nextPage}&sort=${sort}`;
+            products.nextLink = `${baseUrl}/?limit=${limit}&page=${products.nextPage}&sort=${sort}&token=${token}`;
+        }
+        
+  //   if(products.hasPrevPage){
+  //     products.prevLink = `/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+  //     // products.prevLink = `http://localhost:8080/products/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+  //     products.prevLink = `/?limit=${limit}&page=${products.prevPage}&sort=${sort}`
+  // }
   
-  if(products.hasNextPage){
-      //products.nextLink = `api/products/?limit=${limit}&page=${products.nextPage}&sort=${sort}`
-      products.nextLink = `?limit=${limit}&page=${products.nextPage}&sort=${sort}`
-  }
+  // if(products.hasNextPage){
+  //     //products.nextLink = `api/products/?limit=${limit}&page=${products.nextPage}&sort=${sort}`
+  //     products.nextLink = `?limit=${limit}&page=${products.nextPage}&sort=${sort}`
+  // }
       return {
           status: "success",
           msg: products
@@ -68,7 +80,15 @@ class ProductManagerDB {
     }
    };
 
- 
+   getProductAll = async () => { 
+    try {
+      const products = await productsModel.find();
+      return products;
+    } catch (error) {
+       console.log("Error fetching carts:", error)
+    }
+
+   }
  
   getProductById = async (pid) => {
     try {

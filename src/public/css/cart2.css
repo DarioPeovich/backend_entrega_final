@@ -1,0 +1,6 @@
+.product-item {
+    border: 1px solid #ced4da; /* Color del borde */
+    border-radius: 5px; /* Bordes redondeados */
+    margin-bottom: 10px; /* Espacio entre cada producto */
+    padding: 10px; /* Espacio interno */
+  }

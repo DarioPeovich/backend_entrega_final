@@ -62,14 +62,13 @@ export const authToken = (req, res, next) => {
     // Se busca el token en el Headers o si viene como query.
     let authHeader = req.headers.authorization;
     let token;
-
     if (!authHeader) {
         token = req.query.token;
     } else {
         token = authHeader.split(' ')[1];
     }
 
-    //console.log("En Utils.js, token:", token);
+    // console.log("En Utils.js, token:", token);
 
     if (!token || token === "null") {
         return res.status(401).send({ status: "error", error: "No autorizado" });
@@ -111,7 +110,8 @@ const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let destination = "";
         const ruta = req.originalUrl
-        //console.log("req.req.originalUrl", ruta)
+        //console.log("En utils.js req.req.originalUrl", ruta)
+        //console.log("En utils.js. file:", file)
         // Verificar la ruta del endpoint y asignar la carpeta de destino correspondiente
         if (ruta.startsWith('/api/products')) {
             destination = join(__dirname, '/public/images/products');
@@ -121,7 +121,12 @@ const storage = multer.diskStorage({
             if (ruta.includes('/documents')) {
                 destination = join(__dirname, '/public/images/documents');
             }
+            if (ruta.includes('/profileimagen')) {
+                destination = join(__dirname, '/public/images/profile');
+            }
+
         } 
+        //console.log("destination en utils.js: ", destination);
 
         if (destination === "") {
             destination = join(__dirname, '/public/images');
@@ -130,7 +135,7 @@ const storage = multer.diskStorage({
         cb(null, destination);
     },
     filename: function (req, file, cb) {
-        //console.log("entre")
+        // console.log("En utils.js x filename: ", file)
         cb(null, `${Date.now()}-${file.originalname}`);
     }
 });

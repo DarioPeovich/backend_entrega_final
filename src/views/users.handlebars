@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios</title>
+  <!-- Agregar el enlace al archivo CSS de Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Estilo personalizado para el encabezado */
+    .header {
+      font-size: 24px;
+    }
+
+    /* Estilo personalizado para el margen izquierdo */
+    .right-margin {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Botón para eliminar usuarios con timeout -->
+  <div class="my-3 mr-3 d-flex justify-content-end">
+    <button class="btn btn-warning pr-3 mr-3 " onclick="deleteUsersTimeout()" title="Eliminar usuarios que no se hayan conectados dentro de los ultimos 30 min.">Users Delete TimeOut</button>
+  </div>
+
+  <!-- Encabezado con clase 'header' para estilizarlo con Bootstrap -->
+  <h1 class="header">Listado de Usuarios</h1>
+  <!-- Utilizando la clase 'table' de Bootstrap para la tabla -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre Completo</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Última Conexión</th>
+        <th>Acciones</th> <!-- Columna para los botones de acciones -->
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+      <tr>
+        <td>{{this._id}}</td>
+        <td>{{this.fullName}}</td>
+        <td>{{this.email}}</td>
+        <td>{{this.role}}</td>
+        <td>{{this.last_connection}}</td>
+        <td>
+          <!-- Botón para Cambiar Rol con clase 'btn' de Bootstrap -->
+          <button class="btn btn-primary" onclick="changeRole('{{this._id}}')">Cambiar Rol</button>
+          <!-- Botón para Eliminar con clase 'btn' de Bootstrap -->
+          <button class="btn btn-danger" onclick="deleteUser('{{this._id}}')">Eliminar</button>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  
+  <!-- Incluir el archivo JavaScript -->
+  <script src="/js/users.js"></script>
+</body>
+</html>

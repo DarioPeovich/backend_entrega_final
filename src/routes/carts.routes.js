@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {CartsController} from "../controlador/carts.controller.js"
 import { checkRole } from "../middleware/auth.js";
+import { authToken } from "../utils.js";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post("/", CartsController.createCart);
 router.post("/:cid", checkRole(["USER", "PREMIUM"]), CartsController.cartManyProducts);
 
 router.post("/:cid/product/:pid/testing", CartsController.cartAgregateProductTesting); //Para testing, sin checRole
-router.post("/:cid/product/:pid", checkRole(["USER", "PREMIUM"]), CartsController.cartAgregateProduct);
+router.post("/:cid/product/:pid", authToken, checkRole(["USER", "PREMIUM"]), CartsController.cartAgregateProduct);
 
 
 router.delete("/:cid", CartsController.cartDelete);

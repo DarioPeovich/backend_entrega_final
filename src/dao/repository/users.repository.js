@@ -25,6 +25,7 @@ export class UserRepository {
      getEmailUser  = async (email) => {
       //console.log("En UserRepository", "email", email)
       const user = await this.dao.getEmailUser(email);
+      //console.log("En user.repository.js getEmailUser")
       const userDto = new GetsUserDto(user);
       return userDto;
      }

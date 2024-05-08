@@ -1,0 +1,52 @@
+<body>
+    <div class="container">
+        <h1 class="mt-5">Agregar Producto</h1>
+        <form id="productAgregar" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="code" class="form-label">Código</label>
+                <input type="number" class="form-control" id="code" name="code" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stock" name="stock" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <input type="text" class="form-control" id="category" name="category" required>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Estado</label>
+                <select class="form-select" id="status" name="status" required>
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+
+
+
+            <div class="mb-3">
+                <label for="thumbnail" class="form-label">Imagen</label>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail">
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+        </form>
+
+        <h2 class="mt-5 mb-3">Productos existentes</h2>
+        <div id="productsList"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/productAgregar.js"></script>
+
+</body>

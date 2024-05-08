@@ -34,7 +34,13 @@ const inicializePassport = () => {
         async ( req, username, password, done ) => {
         const { first_name, last_name, email, age, role } = req.body;
         try {
-            const filename = req.file.filename;
+            let filename;
+            let profileImageLink = "";
+            if (req.file && req.file.filename)  {
+                filename = req.file.filename;
+                profileImageLink = `/images/profile/${filename}`
+            } 
+            
             // let user = await userModel.findOne({email:username});
             //let user = await userDao.getEmailUser({username});
             let user = await userDao.getEmailUser(username);
@@ -53,7 +59,7 @@ const inicializePassport = () => {
                 cart: cart._id,
                 password: createHash(password),
                 role,
-                profileImage:`http://localhost:8080/images/profile/${filename}`
+                profileImage:profileImageLink   //`/images/profile/${filename}`
                 //rol, ya está por default en schema userModel
             }
             // const result = await userModel.create(newUser);
