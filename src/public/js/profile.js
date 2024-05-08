@@ -1,5 +1,7 @@
 // console.log(`Bearer ${localStorage.getItem("token")}`);
 let user; // Definir la variable json fuera del bloque fetch
+const btnAgregarProductos = document.querySelector("#btn_agregar_productos");
+
 fetch("/api/sessions/current", {
     method:"GET",
     headers:{
@@ -15,8 +17,17 @@ fetch("/api/sessions/current", {
 })
 .then(json =>{
     user = json.payload;
+    
+    if (user && user.role != "ADMIN") {
+        // btnAgregarProductos.style.display = "block";
+         btnAgregarProductos.style.display = "none";
+    } else {
+        // Si el usuario no es ADMIN, ocultar el botón
+        btnAgregarProductos.style.display = "none";
+    }
+
     const container = document.getElementById("result");
-    console.log(json.payload.profileImage)
+    //console.log(json.payload.profileImage)
     // Agregar la imagen de perfil
     if (json.payload.profileImage) {
         const img = document.createElement('img');

@@ -50,10 +50,10 @@ export const addLogger = (req,res,next) =>{
 
     if(currentEnv === "development"){
         req.logger = devLogger;
-        console.log("DEV");
+        //console.log("DEV");
     } else {
         req.logger = prodLogger;
-        console.log("PROD");
+        //console.log("PROD");
     }
     req.logger.info(`${req.url} - method: ${req.method} `)
     next()

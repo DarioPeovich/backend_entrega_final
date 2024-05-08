@@ -14,7 +14,7 @@ const environment = program.opts();
 
 //const pathEnvironment = environment.Mode === "prod" ? path.join(__dirname,"../.env.production") : path.join(__dirname,"../.env.development");
 const pathEnvironment = path.join(__dirname,"../.env");     //ES PARA CUMPLIR CON LAS PREMISAS DEL DESAFIO
-console.log(pathEnvironment);
+// console.log(pathEnvironment);
 
 dotenv.config({path:pathEnvironment})
 
