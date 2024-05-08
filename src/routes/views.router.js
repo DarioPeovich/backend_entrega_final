@@ -33,7 +33,7 @@ const publicAccess = (req, res, next) => {
 };
 const privateAccess = (req, res, next) => {
   if (!req.user) {
-    return res.redirect("/login");
+    return res.redirect("/");
   }
   next();
 };
@@ -41,7 +41,7 @@ const privateAccess = (req, res, next) => {
 //Vistas de Sesion
 router.get("/register", publicAccess, ViewsController.sessionRegister);
 
-// router.get("/login", publicAccess, ViewsController.sessionLogin);
+// router.get("/", publicAccess, ViewsController.sessionLogin);
 router.get("/", publicAccess, ViewsController.sessionLogin);
 
 router.get("/current", privateAccess, ViewsController.sessionProfile); // current

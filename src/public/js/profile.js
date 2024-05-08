@@ -8,7 +8,7 @@ fetch("/api/sessions/current", {
 })
 .then(response=>{
     if(response.status===401){
-        window.location.replace('/login')
+        window.location.replace('/')
     }else{
         return response.json();
     }
@@ -54,7 +54,7 @@ document.getElementById("btn_cargar_documents").addEventListener("click", () => 
             })
             .then(response => {
                 if (response.status === 401) {
-                    window.location.replace('/login');
+                    window.location.replace('/');
                 } else if (response.status === 200) {
                     alert("Imagen cargada exitosamente");
                     // Puedes realizar acciones adicionales después de cargar la imagen si es necesario

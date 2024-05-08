@@ -27,7 +27,7 @@ form.addEventListener('submit', e => {
                 icon: "success",
             });
             
-            window.location.replace("http://localhost:8080/login")
+            window.location.replace("http://localhost:8080/")
 
         } else {
             // Si hay errores, puedes manejarlos aquí o simplemente mostrar una alerta

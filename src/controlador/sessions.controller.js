@@ -68,7 +68,7 @@ class SessionsController{
                     error: 'No se pudo desloguear'
                 })
             }
-            res.redirect('/login')
+            res.redirect('/')
         })
     }
 

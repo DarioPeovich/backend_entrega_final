@@ -13,7 +13,7 @@ form.addEventListener("submit", e =>{
         obj.token = token;
     } else {
         alert("Error token de seguridad no hallado")
-        window.location.replace('/login')
+        window.location.replace('/')
     }
 
 
@@ -26,7 +26,7 @@ form.addEventListener("submit", e =>{
     }).then(result => {
         if (result.status === 200) {
             alert("Contraseña Restaurada");
-            window.location.replace('/login');
+            window.location.replace('/');
         } else if (result.status === 400 || result.status === 401) {
             // Error de datos incorrectos o token inválido
             result.json().then(data => {
@@ -36,13 +36,13 @@ form.addEventListener("submit", e =>{
             // Otro error
             alert("Ha ocurrido un error al restaurar la contraseña. Por favor, inténtalo de nuevo.");
             console.log("Error:", result);
-            window.location.replace('/login');
+            window.location.replace('/');
         }
     }).catch(error => {
         // Error de red u otros errores inesperados
         alert("Ha ocurrido un error al conectar con el servidor. Por favor, inténtalo de nuevo más tarde.");
         console.error("Error:", error);
-        window.location.replace('/login');
+        window.location.replace('/');
     });
     
     
@@ -58,12 +58,12 @@ form.addEventListener("submit", e =>{
     //     if(result.status === 200){
     //         //console.log("Contraseña restaurada");
     //         alert("Contraseña Restaurada")
-    //         window.location.replace('/login')
+    //         window.location.replace('/')
     //     }else{
     //         alert("Ha ocurrido un error al restaurar la contraseña. Por favor, inténtalo de nuevo.");
     //         console.log("error");
     //         console.log(result);
-    //         window.location.replace('/login')
+    //         window.location.replace('/')
     //     }
     // })
 

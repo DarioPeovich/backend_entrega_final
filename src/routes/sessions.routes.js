@@ -16,7 +16,7 @@ const publicAccess = (req,res,next) =>{
 }
 const privateAccess = (req,res,next) =>{
     if(!req.user){
-        return res.redirect('/login');
+        return res.redirect('/');
     }
     next();
 }
@@ -41,9 +41,9 @@ router.post("/restartPassword", SessionsController.sessionsRestartPassword)
 
 router.get("/github", passport.authenticate("github", {scope:['user:email']}), async (req,res)=>{});
 
-router.get("/githubcallback", passport.authenticate("github", {failureRedirect:'/login'}), async (req,res)=>{
+router.get("/githubcallback", passport.authenticate("github", {failureRedirect:'/'}), async (req,res)=>{
     req.session.user = req.user;
-    res.redirect("/login")
+    res.redirect("/")
 });
 
 export default router;
