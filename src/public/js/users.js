@@ -68,18 +68,20 @@ function changeRole(userId) {
     .then(response => {
       
       alertaProceso.close();
-      // Recargar la página actual
-      location.reload();
       
+      
+
       if (response.ok) {
         //alert('Usuarios eliminados con timeout exitosamente.');
         Swal.fire({
           title: 'Proceso completado',
           text: 'El proceso ha terminado correctamente.',
           icon: 'success'
+          
       });
-        // Puedes realizar acciones adicionales después de eliminar los usuarios si es necesario
         
+        // Recargar la página actual
+        location.reload();
         
       } else {
         throw new Error('Error al eliminar usuarios con timeout.');

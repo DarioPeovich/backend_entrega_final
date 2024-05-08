@@ -108,8 +108,8 @@ class UserController {
                 const horas = Math.floor((diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutos = Math.floor((diferenciaMilisegundos % (1000 * 60 * 60)) / (1000 * 60));
 
-                // if ( minutos >= 30) {
-                if ( dias >= 9) {
+                if ( minutos >= 30) {
+                // if ( dias >= 9) {
                     //console.log("Usuario: ", user.last_name + " " + user.first_name);
                     //Enviar correo informando que se elimino su cuenta
                     await sendUsereAccountEliminated(user);
