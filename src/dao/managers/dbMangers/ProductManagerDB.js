@@ -62,7 +62,7 @@ class ProductManagerDB {
           msg: products
       }
       } catch {
-        console.log("Error en lectura de archivos!!");
+        console.log("Error en lectura de archivoss!!");
       }
    
     };
@@ -76,7 +76,7 @@ class ProductManagerDB {
       return result;
     }
     catch {
-      console.log("Error en lectura de archivos!!");
+      console.log("Error en lectura de archivoss!!");
     }
    };
 

@@ -273,7 +273,7 @@ class ProductsController {
       }
 
     } catch {
-      console.log("Error en lectura de archivos!!");
+      console.log("Error en lectura de archivos (controller)!!");
       res.status(500).send({ error: "Se ha producido un error interno en el servidor" });
     }
   };

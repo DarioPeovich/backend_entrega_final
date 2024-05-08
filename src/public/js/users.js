@@ -50,16 +50,37 @@ function changeRole(userId) {
   }
   
   function deleteUsersTimeout() {
-    fetch('/api/deletetimeout', {
+      // Mostrar mensaje de alerta mientras se procesa
+    let alertaProceso = Swal.fire({
+      title: 'Procesando...',
+      text: 'Eliminando usuarios con timeout. Por favor, espera un momento.',
+      icon: 'info',
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    });
+    fetch('/api/users/deletetimeout', {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Agrega el token de autorización si es necesario
+        'authorization': `Bearer ${localStorage.getItem('token')}` // Agrega el token de autorización si es necesario
       }
     })
     .then(response => {
+      
+      alertaProceso.close();
+      // Recargar la página actual
+      location.reload();
+      
       if (response.ok) {
-        alert('Usuarios eliminados con timeout exitosamente.');
+        //alert('Usuarios eliminados con timeout exitosamente.');
+        Swal.fire({
+          title: 'Proceso completado',
+          text: 'El proceso ha terminado correctamente.',
+          icon: 'success'
+      });
         // Puedes realizar acciones adicionales después de eliminar los usuarios si es necesario
+        
+        
       } else {
         throw new Error('Error al eliminar usuarios con timeout.');
       }

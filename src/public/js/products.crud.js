@@ -104,6 +104,7 @@ function appendProductToList(product) {
                 <p class="card-text">${product.description}</p>
                 <p class="card-text">Precio: $${product.price}</p>
                 <p class="card-text">Stock: ${product.stock}</p>
+                <p class="card-text">Owner: ${product.owner}</p>
                 <button class="btn btn-danger" onclick="deleteProduct('${product._id}')">Eliminar</button>
             </div>
         </div>

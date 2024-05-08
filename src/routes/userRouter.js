@@ -15,9 +15,9 @@ const router = Router();
 
     router.post("/:uid/profileimagen", uploader.single('thumbnail'), UserController.profileImagen);
 
-    router.post("/delete/:uid", UserController.deleteUser);
+    router.post("/delete/:uid", UserController.deleteUser);     
 
-    router.post("/deletetimeout", UserController.deleteUserTimeOut);
+    router.delete("/deletetimeout", UserController.deleteUserTimeOut);    //Borrado de Usuarios inactivos por un determiando tiempo
 
     router.post("/", UserController.createUser);
        
