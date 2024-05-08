@@ -86,7 +86,7 @@ class ProductsController {
   
   static createProduct = async (req, res) => {
 
-    console.log("En products.controller.js req", req.body)
+    //console.log("En products.controller.js req", req.body)
 
     let filename = ""
     if (req.file) {
