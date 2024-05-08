@@ -41,7 +41,8 @@ const privateAccess = (req, res, next) => {
 //Vistas de Sesion
 router.get("/register", publicAccess, ViewsController.sessionRegister);
 
-router.get("/login", publicAccess, ViewsController.sessionLogin);
+// router.get("/login", publicAccess, ViewsController.sessionLogin);
+router.get("/", publicAccess, ViewsController.sessionLogin);
 
 router.get("/current", privateAccess, ViewsController.sessionProfile); // current
 //current authToken, privateAccess  ==> de /current
