@@ -39,20 +39,48 @@ class SessionsController{
 
     static sessionsLogin = async (req,res) =>{ 
         //console.log("en sessionsLogin de sessions.controller.js");
+        // const uid = req.user._id;
+        // if(!req.user){
+        //     return res.status(400).send({status:"error"})
+        // }
+        let token = "";
+        await SessionsController.loginTareas(req, res, token);
+
+        //console.log("En sessions.controller.js req.user: ", req.user);
+        // const token = generateToken(req.user);
+        // //console.log("En sessions.controller.js token: ", token);
+        // const user = await userService.getIdUser(uid);
+        // //console.log("=====user======", user);
+        // user.last_connection = Date.now();
+        // const userUpdate = await userService.updateUser(uid, user);
+        //    // Guarda el token en el localStorage del cliente
+        // res.cookie("token", token, { httpOnly: true }); // Puedes usar cookies en lugar de localStorage para almacenar el token de manera segura
+        
+        res.status(200).send({status:"success", token})
+        //res.redirect('/products');
+    }
+    static sessionsGitHubLogin = async (req,res) =>{ 
+   
+        let token = "";
+        await SessionsController.loginTareas(req, res, token);
+        res.redirect('/products');
+    }
+    
+    static async loginTareas(req, res, token) {
         const uid = req.user._id;
         if(!req.user){
             return res.status(400).send({status:"error"})
         }
-        //console.log("En sessions.controller.js req.user: ", req.user);
-        const token = generateToken(req.user);
+        token = generateToken(req.user);
         //console.log("En sessions.controller.js token: ", token);
         const user = await userService.getIdUser(uid);
         //console.log("=====user======", user);
         user.last_connection = Date.now();
         const userUpdate = await userService.updateUser(uid, user);
-
-        res.status(200).send({status:"success", token})
+           // Guarda el token en el localStorage del cliente
+        res.cookie("token", token, { httpOnly: true }); // Puedes usar cookies en lugar de localStorage para almacenar el token de manera segura
     }
+
 
 
     static sessionsFailLogin = (req,res)=>{

@@ -18,9 +18,9 @@ fetch("/api/sessions/current", {
 .then(json =>{
     user = json.payload;
     
-    if (user && user.role != "ADMIN") {
-        // btnAgregarProductos.style.display = "block";
-         btnAgregarProductos.style.display = "none";
+    if (user && user.role === "ADMIN") {
+         btnAgregarProductos.style.display = "inline-block";
+         //btnAgregarProductos.style.display = "none";
     } else {
         // Si el usuario no es ADMIN, ocultar el botón
         btnAgregarProductos.style.display = "none";

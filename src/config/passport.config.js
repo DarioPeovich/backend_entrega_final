@@ -8,24 +8,12 @@ import {CartManagerDB} from "../dao/managers/dbMangers/CartManagerDB.js"
 import {createHash, validatePassword} from "../utils.js";
 import { userDao } from "../dao/index.js";
 import userModel from "../dao/models/users.model.js";
+import __dirname from "../utils.js";
 
 const cartManagerDB = new CartManagerDB();
 
-//--a continuacion Instancia de prueba. No funciona 21/02/24
-//const userController = new UserController();
-//--Instancia de prueba xq no anda el use controller
-//const useManagerDb = new UserManagerDB();
-//--Hasta lineas de pruebas
 
 const LocalStrategy = local.Strategy;
-//Para jwt
-// const JWTStrategy = jwt.Strategy;
-// const ExtractJWT = jwt.ExtractJwt;
-// const jwtOptions = {
-//   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-//   secretOrKey: config.jwt.word  //'tu_secreto_jwt', // Reemplaza 'tu_secreto_jwt' con tu clave secreta
-// };
-//--Fin const JWT
 
 const inicializePassport = () => {
 
@@ -81,12 +69,7 @@ const inicializePassport = () => {
               const user = await userModel.findOne({email:username})
               //const user = await userDao.getEmailUser({username});
                
-              //Todas estas pruebas no me funcionan 21/02/24
-               // const user = await userController.getEmailUser(username);
-              //console.log("UserName: " + JSON.stringify(useManagerDb))
-              //const user = await useManagerDb.getEmailUser(username);
-              
-              if(!user){
+               if(!user){
                   return done(null, false);
               }
               
@@ -112,48 +95,60 @@ const inicializePassport = () => {
         done(null, user);
     });
     
-    passport.use('github', new GitHubStrategy({
-        clientID: "Iv1.c4d92ac110a316c6",
-        clientSecret:"f5352593c772214e13d8972b06f78be03afbd577",
-        callbackURL:"http://localhost:8080/api/sessions/githubcallback"
-    }, async(accesToken, refreshToken,profile, done)=>{
-        
-        console.log("Entre a gitHub en passport.config.js")
+//10/05/24: como configurar github para poder utilizarlo para inicio de Sesion
+//In la pagina de GitHub, ir a Settings/Developer Settings, luego seleccionar GitHub Apps, ahi se ven las app que pueden acceder, o gnerar una nueva
+//de esa seccion se obtienen los claves que se usan a en el seteo de GitHubStrategy de passport.
+//clientID: le brinda al hace new GitHuv App
+//clientSecret: Se obtiene al generar la clave Cliet secrets
+// En Homepage URL debe ir endPoint que tiene que llamar luego de iniciar sesion, es decir la pagina principal del proyecto, que localmente seria: http://localhost:8080/
+// Si se desesa que funcione desde el despilegue, en este caso railWay seria: https://backendentregafinal-production.up.railway.app/
+//callbackURL: Debe ir el link al que deriva GitHub una vez que que paso la validacion de passport. Localmente seria: http://localhost:8080/api/sessions/githubcallback, y
+// desde el despliegue desde railWay: https://backendentregafinal-production.up.railway.app/api/sessions/githubcallback
+passport.use('github', new GitHubStrategy({
+    clientID: "Iv1.c4d92ac110a316c6",
+    clientSecret:"f5352593c772214e13d8972b06f78be03afbd577",
+    callbackURL:"https://backendentregafinal-production.up.railway.app/api/sessions/githubcallback",     //"http://localhost:8080/api/sessions/githubcallback",
+    scope: ['user:email'] // Solicitar acceso al correo electrónico del usuario
+}, async(accesToken, refreshToken,profile, done)=>{
+    
+    console.log("Entre a gitHub en passport.config.js")
 
 
-        try {
-            // console.log(profile._json.name);
-            const first_name = profile._json.name
-            let email;
-            if(!profile._json.email){
-                email = profile.username;
-            }
-
-            // let user = await userModel.findOne({email:profile._json.email});
-            let user = await userDao.getEmailUser(profile._json.email);
-            
-            if(user){
-                console.log('Usuario ya registrado');
-                return done(null,false)
-            }
-
-            const newUser = {
-                first_name,
-                last_name: "",
-                email,
-                age: 18,
-                password: ""
-            }
-            // const result = await userModel.create(newUser);
-            const result = await userDao.createUser(newUser);
-            
-            return done (null, result);
-
-        } catch (error) {
-            return done(error)
+    try {
+        // console.log(profile._json.name);
+        const first_name = profile._json.name
+        let email;
+        if(!profile._json.emails){
+            // email = profile.username;
+            // email = profile._json.emails[0].value;
+            email = profile.emails[0].value;
         }
 
-    }))
+        // let user = await userModel.findOne({email:profile._json.email});
+        let user = await userDao.getEmailUser(email);
+        
+        if(user){
+            console.log('Usuario ya registrado');
+            return done(null,user)
+        }
+
+        const newUser = {
+            first_name,
+            last_name: "",
+            email,
+            age: 18,
+            password: ""
+        }
+        // const result = await userModel.create(newUser);
+        const result = await userDao.createUser(newUser);
+        
+        return done (null, result);
+
+    } catch (error) {
+        return done(error)
+    }
+
+}))
 }
 
 export default inicializePassport;

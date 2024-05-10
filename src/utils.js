@@ -41,33 +41,29 @@ export const generateToken = (user) => {
     const token = jwt.sign({user}, PRIVATE_KEY,{expiresIn:'1d'})
     return token;
 }
-// export const authToken = (req,res,next) => {
 
-//     const authHeader = req.headers.authorization;
-//     //console.log("authHeader (En utils)", authHeader);
-//     const token = authHeader.split(' ')[1];
-//     if(token === "null"){
-//         return res.status(401).send({status:"error",error: "No autorizado" })
-//     }
-//     jwt.verify(token,PRIVATE_KEY,(error,credentials)=>{
-//         if(error){
-//             return res.status(401).send({status:"error",error: "No autorizado" })
-//         }
-//         req.user = credentials.user;
-//         next();
-//     })
-// }
 
 export const authToken = (req, res, next) => {
     // Se busca el token en el Headers o si viene como query.
-    let authHeader = req.headers.authorization;
-    let token;
-    if (!authHeader) {
-        token = req.query.token;
-    } else {
-        token = authHeader.split(' ')[1];
-    }
+    // let authHeader = req.headers.authorization;
+    // let token;
+    // if (!authHeader) {
+    //     token = req.query.token;
+    // } else {
+    //     token = authHeader.split(' ')[1];
+    // }
 
+    //COOKIE!!!
+    //10/05/24: ATENCION!!!, DESPUÉS DE ENTREGAR EL PROYECTO, AL OTR DIA QUERIENDO HACER ANDAR INCIO DE SESION CON GITHUB, CHATGPT ME ORIENTA QUE ES MEJOR USAR 
+    //          COOKIE PARA ENVIAR EL TOKEN AL FRONT, YA QUE EL NAVEGADOR AUTOMATICAMENTE LO ADHIERE AL REQUESTER. POR NO USAR COOKIE, PERDI MUCHO TIEMPO 
+    //          EN TRATAR DE LLAMAR A VISTAS QUE NECESITABAN DEL TOKEN, AGREGANDO UN HEADER AL FETCH, TODO DE GUSTO. COOKIE ERA LA SOLUCION.
+
+    const token = req.cookies.token;
+
+    // Si no hay token, devuelve un error de autorización
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized: Missing token" });
+    }
     // console.log("En Utils.js, token:", token);
 
     if (!token || token === "null") {
@@ -83,7 +79,7 @@ export const authToken = (req, res, next) => {
     });
 };
 
-//--JWT FIN
+
 
 //Generacion de token con JWT para mail
 export const generateEmailToken = (email,expireTime)=>{

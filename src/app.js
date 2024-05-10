@@ -22,6 +22,7 @@ import messagesModel from './dao/models/messages.model.js';
 import inicializePassport from './config/passport.config.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { addLogger } from './utils/logger.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = config.server.port;     //8080;
 let messages = [];
@@ -64,7 +65,8 @@ app.use(session({
     resave:false,
     saveUninitialized:false
 }))
-
+// Usa cookie-parser como middleware
+app.use(cookieParser());
 //Inicializacion de estrategias de autenticacion
 inicializePassport()
 app.use(passport.initialize());

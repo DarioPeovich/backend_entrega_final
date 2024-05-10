@@ -1,5 +1,6 @@
 const form = document.getElementById('loginForm');
-const purchase = document.getElementById('purchase');
+// const githubLoginBtn = document.getElementById('githubLoginBtn');
+// const purchase = document.getElementById('purchase');
 form.addEventListener("submit", e => {
     e.preventDefault();
     const data = new FormData(form);
@@ -38,3 +39,23 @@ form.addEventListener("submit", e => {
         console.error('Error:', error);
     });
 });
+
+// githubLoginBtn.addEventListener('click', e => {
+//     e.preventDefault();
+
+//     fetch('/api/sessions/github')
+//         .then(response => {
+//             // Verifica si la respuesta fue exitosa (código de estado 200)
+//             if (response.status === 200) {
+//                 console.log("GitHUb Session Ok")
+//                 // La redirección se manejará automáticamente al endpoint "/githubcallback"
+//             } else {
+//                 // Si la respuesta no es exitosa, muestra un mensaje de error
+//                 throw new Error('Failed to initiate GitHub login');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             alert('Error al iniciar sesión con GitHub');
+//         });
+// });
