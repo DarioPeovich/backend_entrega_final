@@ -1,10 +1,33 @@
-    <h1>Bienvenidos al chat!</h1>
-<div>
-<input type="text" id="chat-input">
-</div>
-<div>
-    <p id="messages-panel"></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Bienvenidos al chat!</h1>
+        <div class="row">
+            <div class="col-9">
+                <input type="text" class="form-control" id="chat-input" placeholder="Escribe tu mensaje...">
+            </div>
+            <div class="col-3">
+                <button class="btn btn-primary w-100" id="send-btn">Enviar</button>
+            </div>
+        </div>
+        <div class="mt-4" id="messages-panel"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+
+</html>

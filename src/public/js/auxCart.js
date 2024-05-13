@@ -30,11 +30,12 @@ function redirectProducts() {
   const token = localStorage.getItem('token');
 
   // Verificar si el token existe y no es nulo o vacío
-  if (token && token.trim() !== '') {
-    // Redirigir al usuario a la página de productos con el token en la URL
-    window.location.href = `/products?token=${token}`;
-  } else {
-    // En caso de que no haya token válido, hacer algo o redirigir a otra página
-    console.log('No se encontró ningún token válido en el localStorage.');
-  }
+  // if (token && token.trim() !== '') {
+  //   // Redirigir al usuario a la página de productos con el token en la URL
+  //   window.location.href = `/products?token=${token}`;
+  // } else {
+  //   // En caso de que no haya token válido, hacer algo o redirigir a otra página
+  //   console.log('No se encontró ningún token válido en el localStorage.');
+  // }
+  window.location.href = `/products`;   //El token se almacena como una coockie, y el navegador solo se encarga d enviarla al Back
 }

@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            "authorization": `Bearer ${localStorage.getItem("token")}`
+                            "Content-Type": "application/json"
+                            // "authorization": `Bearer ${localStorage.getItem("token")}`
                         }
                     });
 

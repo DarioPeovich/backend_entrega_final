@@ -135,12 +135,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // Obtener el token de autorización del almacenamiento local
         const token = localStorage.getItem("token");
 
-        if (token) {
-            // Redirigir al usuario a la página de usuarios con el token como parámetro de consulta en la URL
-            window.location.href = `/users?token=${token}`;
-        } else {
-            console.error("No se encontró un token de autorización.");
-        }
+        // if (token) {
+        //     // Redirigir al usuario a la página de usuarios con el token como parámetro de consulta en la URL
+             window.location.href = `/users`;
+        // } else {
+        //     console.error("No se encontró un token de autorización.");
+        // }
     });
 
 });

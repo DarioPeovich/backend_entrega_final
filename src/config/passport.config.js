@@ -95,7 +95,7 @@ const inicializePassport = () => {
         done(null, user);
     });
     
-//10/05/24: como configurar github para poder utilizarlo para inicio de Sesion
+//10/05/24: Como configurar github para poder utilizarlo para inicio de Sesion
 //In la pagina de GitHub, ir a Settings/Developer Settings, luego seleccionar GitHub Apps, ahi se ven las app que pueden acceder, o gnerar una nueva
 //de esa seccion se obtienen los claves que se usan a en el seteo de GitHubStrategy de passport.
 //clientID: le brinda al hace new GitHuv App
